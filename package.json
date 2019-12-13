@@ -1,0 +1,27 @@
+{
+  "name": "forecasts-bot",
+  "version": "1.0.0",
+  "description": "Telegram bot, `LardsBot`, to handle reminders and score entry for Lard's Forecasts.",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run format:ts && npm run build:ts",
+    "build:ts": "npx tsc -p .",
+    "format:ts": "prettier --loglevel silent --write \"client/**/*.ts\" \"src/**/*.ts\" \"test/**/*.ts\"",
+    "test": "test"
+  },
+  "author": "Mark Davies",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mssql": "^6.0.1",
+    "node-telegram-bot-api": "^0.40.0",
+    "telegraf": "^3.34.1",
+    "telegraf-logger": "^3.0.0",
+    "wt-cli": "^11.0.2"
+  },
+  "devDependencies": {
+    "@types/mssql": "^6.0.0",
+    "prettier": "1.19.1",
+    "typescript": "^3.7.3"
+  }
+}
