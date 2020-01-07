@@ -1,0 +1,38 @@
+{
+    "parserOptions": {
+        "ecmaVersion": 2018
+    },
+    "rules": {
+        "vue/attributes-order": "off",
+        "vue/max-attributes-per-line": "off",
+        "vue/no-v-html": "warn",
+        "vue/require-default-prop": "off",
+        "vue/html-indent": [
+            "error",
+            4
+        ],
+        "vue/attribute-hyphenation": [
+            "error",
+            "never"
+        ],
+        "vue/html-closing-bracket-newline": [
+            "error",
+            {
+                "multiline": "never"
+            }
+        ],
+        "vue/html-self-closing": [
+            "error",
+            {
+                "html": {
+                    "void": "always",
+                    "normal": "never"
+                }
+            }
+        ],
+        "vue/multiline-html-element-content-newline": "error",
+        "vue/singleline-html-element-content-newline": "off",
+        "vue/component-name-in-template-casing": ["error", "kebab-case"],
+        "vue/name-property-casing": ["error", "kebab-case"]
+    }
+}
