@@ -18,10 +18,6 @@ const bot = ForecastsBot(settings);
 
 bot.use(mw);
 
-bot.hears(/ping/i, ctx => {
-    ctx.reply('Pong!');
-});
-
 bot.startWebhook(`/${secretPath}`, null, port);
 
 const test = new TelegrafTest({
