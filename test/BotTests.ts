@@ -18,6 +18,7 @@ const settings: Settings = {
 const mw = AuthenticateFromInvitation(settings);
 
 const bot = ForecastsBot(settings, [mw]);
+
 bot.startWebhook(`/${secretPath}`, null, port);
 
 const client = new TelegrafTest({
