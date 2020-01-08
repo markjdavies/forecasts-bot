@@ -1,14 +1,8 @@
 import { ContextMessageUpdate } from 'telegraf';
-import * as sql from 'mssql';
-
-export interface Player {
-    playerId: number;
-    userName: string;
-    displayName: string;
-    team: string;
-}
+import { Player } from './dataModel/Player';
+import { DataOperations } from './dal/DataOperations';
 
 export interface ForecastsContext extends ContextMessageUpdate {
-    dbConfig?: sql.config;
+    dataOperations?: DataOperations;
     player?: Player;
 }
