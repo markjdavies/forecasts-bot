@@ -18,11 +18,7 @@ export default (
         }
     });
 
-    bot.hears(/ping/i, (ctx: ForecastsContext) => {
-        ctx.reply('Pong!');
-    });
-
-    bot.command('good', (ctx: ForecastsContext) =>
+    bot.hears(/\/good/i, (ctx: ForecastsContext) =>
         ctx.reply('Good, good, good!')
     );
 

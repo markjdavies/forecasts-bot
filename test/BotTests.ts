@@ -27,9 +27,9 @@ const client = new TelegrafTest({
 
 describe('forecasts-bot', () => {
     it('is alive', async () => {
-        const r = await client.sendMessageWithText('/ping');
+        const r = await client.sendMessageWithText('/good');
         expect(r.data.text).to.be.a('string');
-        expect(r.data.text).to.contain('Pong!');
+        expect(r.data.text).to.contain('Good, good, good!');
     });
     describe('AuthenticateFromInvitation middleware', () => {
         it('should set the player context from invitation ID', async () => {
