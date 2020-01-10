@@ -9,7 +9,8 @@
     "format:ts": "prettier --loglevel silent --write \"client/**/*.ts\" \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint": "npx eslint --ext .ts ./src",
     "lint:fix": "npx eslint --fix --ext .ts ./src",
-    "test": "npm run build && mocha --exit --timeout 100000"
+    "test": "npm run build && nyc --reporter=html --reporter=text ava --verbose --timeout=3000 ./test/*Tests.js",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "author": "Mark Davies",
   "license": "MIT",
@@ -17,21 +18,19 @@
     "express": "^4.17.1",
     "mssql": "^6.0.1",
     "node-telegram-bot-api": "^0.40.0",
-    "save-dev": "0.0.1-security",
     "telegraf": "^3.35.0",
-    "telegraf-logger": "^3.0.0",
-    "ts-sinon": "^1.0.24"
+    "telegraf-logger": "^3.0.0"
   },
   "devDependencies": {
-    "@types/mocha": "^5.2.7",
     "@types/mssql": "^6.0.0",
     "@typescript-eslint/eslint-plugin": "^2.15.0",
     "@typescript-eslint/parser": "^2.15.0",
+    "ava": "^2.4.0",
+    "coveralls": "^3.0.9",
     "eslint": "^6.8.0",
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-vue": "^6.1.2",
-    "expect.js": "^0.3.1",
-    "mocha": "^7.0.0",
+    "nyc": "^15.0.0",
     "prettier": "1.19.1",
     "telegraf-test": "^1.2.0",
     "typescript": "^3.7.4"

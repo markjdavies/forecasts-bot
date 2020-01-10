@@ -1,4 +1,4 @@
-import * as expect from 'expect.js';
+import test from 'ava';
 import * as TelegrafTest from 'telegraf-test';
 import { Settings } from '../src/Settings';
 import AuthenticateFromInvitation from '../src/middleware/AuthenticateFromInvitation';
@@ -25,22 +25,14 @@ const client = new TelegrafTest({
     url: `http://127.0.0.1:${port}/${secretPath}`
 });
 
-describe('forecasts-bot', () => {
-    it('is alive', async () => {
-        const r = await client.sendMessageWithText('/ping');
-        expect(r.data.text).to.be.a('string');
-        expect(r.data.text).to.contain('Pong!');
-    });
-    describe('AuthenticateFromInvitation middleware', () => {
-        it('should set the player context from invitation ID', async () => {
-            const result = await client.sendMessageWithText(
-                `/start ${validInvitationId}`
-            );
+test('it is alive', async t => {
+    const r = await client.sendMessageWithText('/ping');
+    t.is(r.data.text, 'Pong!');
+});
 
-            expect(result.data.text).to.be.a('string');
-            expect(result.data.text).to.be(
-                `Evening, ${basicPlayer.displayName}.`
-            );
-        });
-    });
+test('should recognise an invited player', async t => {
+    const result = await client.sendMessageWithText(
+        `/start ${validInvitationId}`
+    );
+    t.is(result.data.text, `Evening, ${basicPlayer.displayName}.`);
 });
