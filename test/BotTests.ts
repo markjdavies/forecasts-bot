@@ -26,8 +26,20 @@ const client = new TelegrafTest({
 });
 
 test('it is alive', async t => {
-    const r = await client.sendMessageWithText('/ping');
-    t.is(r.data.text, 'Pong!');
+    const r = await client.sendMessageWithText('/good');
+    t.is(r.data.text, 'Good, good, good!');
+});
+
+test('should acknowledge an anonymous user', async t => {
+    const result = await client.sendMessageWithText(`/start`);
+    t.is(result.data.text, `Evening, chief.`);
+});
+
+test('should disregard an unrecognised invitation', async t => {
+    const result = await client.sendMessageWithText(
+        `/start 49b9f2b7-4c79-4523-b0f9-6ba22b5fca8d`
+    );
+    t.is(result.data.text, `Evening, chief.`);
 });
 
 test('should recognise an invited player', async t => {
