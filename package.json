@@ -1,6 +1,6 @@
 {
   "name": "forecasts-bot",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Telegram bot, `LardsBot`, to handle reminders and score entry for Lard's Forecasts.",
   "main": "index.js",
   "scripts": {
