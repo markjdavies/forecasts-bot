@@ -10,7 +10,12 @@
     "lint": "npx eslint --ext .ts ./src",
     "lint:fix": "npx eslint --fix --ext .ts ./src",
     "test": "npm run build && nyc --reporter=html --reporter=text ava --verbose --timeout=3000 ./test/*Tests.js",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "release": "release-it"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/markjdavies/forecasts-bot.git"
   },
   "author": "Mark Davies",
   "license": "MIT",
@@ -33,6 +38,7 @@
     "eslint-plugin-vue": "^6.1.2",
     "nyc": "^15.0.0",
     "prettier": "1.19.1",
+    "release-it": "^12.4.3",
     "telegraf-test": "^1.2.0",
     "typescript": "^3.7.4"
   }
