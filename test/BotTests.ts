@@ -1,7 +1,7 @@
 import test from 'ava';
 import * as TelegrafTest from 'telegraf-test';
 import { Settings } from '../src/Settings';
-import AuthenticateFromInvitation from '../src/middleware/AuthenticateFromInvitation';
+import authenticateFromInvitation from '../src/middleware/authenticateFromInvitation';
 import ForecastsBot from '../src/ForecastsBot';
 import { MockOperations } from './MockOperations';
 import { validInvitationId } from './fixtures/Fixtures';
@@ -15,7 +15,7 @@ const settings: Settings = {
     dataOperations: new MockOperations()
 };
 
-const mw = AuthenticateFromInvitation(settings);
+const mw = authenticateFromInvitation(settings);
 
 const bot = ForecastsBot(settings, [mw]);
 
