@@ -48,3 +48,8 @@ test('should recognise an invited player', async t => {
     );
     t.is(result.data.text, `Evening, ${basicPlayer.displayName}.`);
 });
+
+test('should provide next round date on nextFixture command', async t => {
+    const result = await client.sendMessageWithText('/nextFixture');
+    t.is(result.data.text, 'Next matches: Tue 14th Jan (Cup Quarter Finals)');
+});

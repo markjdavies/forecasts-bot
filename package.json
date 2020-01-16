@@ -1,6 +1,6 @@
 {
   "name": "forecasts-bot",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Telegram bot, `LardsBot`, to handle reminders and score entry for Lard's Forecasts.",
   "main": "index.js",
   "scripts": {
@@ -10,12 +10,18 @@
     "lint": "npx eslint --ext .ts ./src",
     "lint:fix": "npx eslint --fix --ext .ts ./src",
     "test": "npm run build && nyc --reporter=html --reporter=text ava --verbose --timeout=3000 ./test/*Tests.js",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "release": "release-it"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/markjdavies/forecasts-bot.git"
   },
   "author": "Mark Davies",
   "license": "MIT",
   "dependencies": {
     "express": "^4.17.1",
+    "moment": "^2.24.0",
     "mssql": "^6.0.1",
     "node-telegram-bot-api": "^0.40.0",
     "telegraf": "^3.35.0",
@@ -24,7 +30,7 @@
   "devDependencies": {
     "@types/mssql": "^6.0.0",
     "@typescript-eslint/eslint-plugin": "^2.16.0",
-    "@typescript-eslint/parser": "^2.15.0",
+    "@typescript-eslint/parser": "^2.16.0",
     "ava": "^2.4.0",
     "coveralls": "^3.0.9",
     "eslint": "^6.8.0",
@@ -32,6 +38,7 @@
     "eslint-plugin-vue": "^6.1.2",
     "nyc": "^15.0.0",
     "prettier": "1.19.1",
+    "release-it": "^12.4.3",
     "telegraf-test": "^1.2.0",
     "typescript": "^3.7.4"
   }
