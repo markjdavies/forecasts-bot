@@ -11,7 +11,7 @@
     "lint:fix": "npx eslint --fix --ext .ts ./src",
     "test": "npm run build && nyc --reporter=html --reporter=text ava --verbose --timeout=3000 ./test/*Tests.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "release": "release-it"
+    "release": "npm run test && release-it"
   },
   "repository": {
     "type": "git",
