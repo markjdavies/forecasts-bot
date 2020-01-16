@@ -1,12 +1,15 @@
 import Telegraf, { Middleware } from 'telegraf';
 import { ForecastsContext } from './ForecastsContext';
 import { Settings } from './Settings';
+import { RoundDate } from './dataModel/RoundDate';
+import * as moment from 'moment';
 
 export default (
     settings: Settings,
     middlewares: Middleware<ForecastsContext>[]
 ): Telegraf<ForecastsContext> => {
     const bot = new Telegraf(settings.tokenId);
+    const operations = settings.dataOperations;
 
     middlewares.map((mw: Middleware<ForecastsContext>) => bot.use(mw));
 
@@ -18,9 +21,15 @@ export default (
         }
     });
 
-    bot.hears(/\/good/i, (ctx: ForecastsContext) =>
+    bot.hears(/\/good/, (ctx: ForecastsContext) =>
         ctx.reply('Good, good, good!')
     );
+
+    bot.hears(/\/nextFixture/i, async (ctx: ForecastsContext) => {
+        const nextFixtures: RoundDate = await operations.GetNextFixture();
+        const formattedDate = moment(nextFixtures.date).format('ddd Do MMM');
+        ctx.reply(`Next matches: ${formattedDate} (${nextFixtures.roundName})`);
+    });
 
     return bot;
 };
