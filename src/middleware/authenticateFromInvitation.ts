@@ -1,7 +1,7 @@
 import { ForecastsContext } from '~src/ForecastsContext';
 import { Settings } from '~src/Settings';
 
-export default (
+export const authenticateFromInvitation = (
     settings: Settings
 ): ((ctx: ForecastsContext, next: Function) => Promise<void>) => {
     const operations = settings.dataOperations;

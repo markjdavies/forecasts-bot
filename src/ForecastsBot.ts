@@ -4,7 +4,7 @@ import { Settings } from './Settings';
 import { RoundDate } from './dataModel/RoundDate';
 import * as moment from 'moment';
 
-export default (
+export const ForecastsBot = (
     settings: Settings,
     middlewares: Middleware<ForecastsContext>[]
 ): Telegraf<ForecastsContext> => {

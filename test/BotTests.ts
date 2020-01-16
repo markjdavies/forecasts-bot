@@ -1,8 +1,8 @@
 import test from 'ava';
 import * as TelegrafTest from 'telegraf-test';
 import { Settings } from '../src/Settings';
-import authenticateFromInvitation from '../src/middleware/authenticateFromInvitation';
-import ForecastsBot from '../src/ForecastsBot';
+import { authenticateFromInvitation } from '../src/middleware/authenticateFromInvitation';
+import { ForecastsBot } from '../src/ForecastsBot';
 import { MockOperations } from './MockOperations';
 import { validInvitationId } from './fixtures/Fixtures';
 import { basicPlayer } from './fixtures/PlayerFixtures';
