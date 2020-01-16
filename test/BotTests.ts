@@ -2,7 +2,7 @@ import test from 'ava';
 import * as TelegrafTest from 'telegraf-test';
 import { Settings } from '../src/Settings';
 import { authenticateFromInvitation } from '../src/middleware/authenticateFromInvitation';
-import { ForecastsBot } from '../src/ForecastsBot';
+import { forecastsBot } from '../src/forecastsBot';
 import { MockOperations } from './MockOperations';
 import { validInvitationId } from './fixtures/Fixtures';
 import { basicPlayer } from './fixtures/PlayerFixtures';
@@ -17,7 +17,7 @@ const settings: Settings = {
 
 const mw = authenticateFromInvitation(settings);
 
-const bot = ForecastsBot(settings, [mw]);
+const bot = forecastsBot(settings, [mw]);
 
 bot.startWebhook(`/${secretPath}`, null, port);
 
