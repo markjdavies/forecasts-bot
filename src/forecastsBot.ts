@@ -31,5 +31,17 @@ export const forecastsBot = (
         ctx.reply(`Next matches: ${formattedDate} (${nextFixtures.roundName})`);
     });
 
+    bot.command('/casetestlower', (ctx: ForecastsContext) => {
+        ctx.reply('Case test lower');
+    });
+
+    bot.command('casetestlowernoslash', (ctx: ForecastsContext) => {
+        ctx.reply('Case test lower');
+    });
+
+    bot.command('caseTestCamel', (ctx: ForecastsContext) => {
+        ctx.reply('Case test camel');
+    });
+
     return bot;
 };
