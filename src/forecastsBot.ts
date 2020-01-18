@@ -21,28 +21,14 @@ export const forecastsBot = (
         }
     });
 
-    bot.hears(/\/good/, (ctx: ForecastsContext) =>
+    bot.command('good', (ctx: ForecastsContext) =>
         ctx.reply('Good, good, good!')
     );
 
-    bot.hears(/\/nextFixture/i, async (ctx: ForecastsContext) => {
+    bot.command('nextfixture', async (ctx: ForecastsContext) => {
         const nextFixtures: RoundDate = await operations.GetNextFixture();
         const formattedDate = moment(nextFixtures.date).format('ddd Do MMM');
         ctx.reply(`Next matches: ${formattedDate} (${nextFixtures.roundName})`);
-    });
-
-    bot.command('casetestlower', (ctx: ForecastsContext) => {
-        /* eslint-disable-next-line no-console */
-        console.log(ctx.message);
-        ctx.reply('Case test lower');
-    });
-
-    bot.command('casetestlowernoslash', (ctx: ForecastsContext) => {
-        ctx.reply('Case test lower');
-    });
-
-    bot.command('caseTestCamel', (ctx: ForecastsContext) => {
-        ctx.reply('Case test camel');
     });
 
     return bot;
