@@ -27,10 +27,11 @@ const client = new TelegrafTest({
 });
 
 const sendCommand = async (text: string) => {
+    const length = text.split(' ')[0].length;
     return await client.sendMessageWithText(text, {
         entities: [{
             offset: 0,
-            length: text.length,
+            length,
             type: 'bot_command'
         }]
     });
