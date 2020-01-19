@@ -13,7 +13,7 @@ export const forecastsBot = (
 
     middlewares.map((mw: Middleware<ForecastsContext>) => bot.use(mw));
 
-    bot.hears(/start/i, (ctx: ForecastsContext) => {
+    bot.start((ctx: ForecastsContext) => {
         if (ctx.player) {
             ctx.reply(`Evening, ${ctx.player.displayName}.`);
         } else {
