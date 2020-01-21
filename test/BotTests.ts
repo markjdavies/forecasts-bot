@@ -15,7 +15,6 @@ const settings: Settings = {
     dataOperations: new MockOperations()
 };
 
-
 const mw = authenticateFromInvitation(settings);
 
 const bot = forecastsBot(settings, [mw]);
@@ -29,11 +28,13 @@ const client = new TelegrafTest({
 const sendCommand = async (text: string) => {
     const length = text.split(' ')[0].length;
     return await client.sendMessageWithText(text, {
-        entities: [{
-            offset: 0,
-            length,
-            type: 'bot_command'
-        }]
+        entities: [
+            {
+                offset: 0,
+                length,
+                type: 'bot_command'
+            }
+        ]
     });
 };
 
@@ -55,13 +56,27 @@ test('should disregard an unrecognised invitation', async t => {
 });
 
 test('should recognise an invited player', async t => {
-    const result = await sendCommand(
-        `/start ${validInvitationId}`
-    );
+    const result = await sendCommand(`/start ${validInvitationId}`);
     t.is(result.data.text, `Evening, ${basicPlayer.displayName}.`);
 });
 
-test('should provide next round date on nextFixture command', async t => {
+test('should provide next round date on nextfixture command', async t => {
     const result = await sendCommand('/nextfixture');
     t.is(result.data.text, 'Next matches: Tue 14th Jan (Cup Quarter Finals)');
+});
+
+test('should provide players next round date on mynextfixture command - home fixture', async t => {
+    const result = await sendCommand('/mynextfixture');
+    t.is(
+        result.data.text,
+        'Next match: (H) Sat 25th Jan (League Game 25) v The Treasury All Stars'
+    );
+});
+
+test('should provide players next round date on mynextfixture command - away fixture', async t => {
+    const result = await sendCommand('/mynextfixture');
+    t.is(
+        result.data.text,
+        'Next match: (A) Sat 1st Feb (Cup Semi Final) v Epic Tom'
+    );
 });
