@@ -39,6 +39,13 @@ export class MockOperations implements DataOperations {
         }
     }
 
+    public async SetPlayerChatId(
+        _playerId: number,
+        _chatId: number
+    ): Promise<void> {
+        return;
+    }
+
     public async GetPlayerFromChatId(chatId: number): Promise<Player> {
         if (chatId === playerOneChatId) {
             return basicPlayer1;

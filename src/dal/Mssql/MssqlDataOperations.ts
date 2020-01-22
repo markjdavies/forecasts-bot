@@ -31,6 +31,17 @@ export class MssqlDataOperations implements DataOperations {
         return result.recordsets[0][0];
     }
 
+    public async SetPlayerChatId(
+        playerId: number,
+        chatId: number
+    ): Promise<void> {
+        const request = await this.getRequest();
+        request.input('playerId', sql.Int, playerId);
+        request.input('chatId', sql.Int, chatId);
+        await request.execute<Player>('telegram.SetPlayerChatId');
+        return;
+    }
+
     public async GetPlayerFromChatId(chatId: number): Promise<Player> {
         const request = await this.getRequest();
         request.input('chatId', sql.Int, chatId);
