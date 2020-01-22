@@ -13,6 +13,10 @@ export const authenticateFromInvitation = (
                 invitationGuid
             );
             if (player) {
+                await operations.SetPlayerChatId(
+                    player.playerId,
+                    ctx.message.chat?.id
+                );
                 ctx.player = player;
             }
         }
