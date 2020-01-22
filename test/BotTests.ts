@@ -1,11 +1,16 @@
 import test from 'ava';
 import * as TelegrafTest from 'telegraf-test';
 import { Settings } from '../src/Settings';
+import { authenticateFromChatId } from '../src/middleware/authenticateFromChatId';
 import { authenticateFromInvitation } from '../src/middleware/authenticateFromInvitation';
 import { forecastsBot } from '../src/forecastsBot';
 import { MockOperations } from './MockOperations';
-import { validInvitationId } from './fixtures/Fixtures';
-import { basicPlayer } from './fixtures/PlayerFixtures';
+import {
+    validInvitationId,
+    playerOneChatId,
+    playerTwoChatId
+} from './fixtures/Fixtures';
+import { basicPlayer1 } from './fixtures/PlayerFixtures';
 
 const port = 3000;
 const secretPath = 'secret-path';
@@ -15,9 +20,12 @@ const settings: Settings = {
     dataOperations: new MockOperations()
 };
 
-const mw = authenticateFromInvitation(settings);
+const mw = [
+    authenticateFromInvitation(settings),
+    authenticateFromChatId(settings)
+];
 
-const bot = forecastsBot(settings, [mw]);
+const bot = forecastsBot(settings, mw);
 
 bot.startWebhook(`/${secretPath}`, null, port);
 
@@ -25,7 +33,8 @@ const client = new TelegrafTest({
     url: `http://127.0.0.1:${port}/${secretPath}`
 });
 
-const sendCommand = async (text: string) => {
+const sendCommand = async (text: string, chatId: number = 1) => {
+    client.setChat({ id: chatId, type: 'private' });
     const length = text.split(' ')[0].length;
     return await client.sendMessageWithText(text, {
         entities: [
@@ -57,7 +66,17 @@ test('should disregard an unrecognised invitation', async t => {
 
 test('should recognise an invited player', async t => {
     const result = await sendCommand(`/start ${validInvitationId}`);
-    t.is(result.data.text, `Evening, ${basicPlayer.displayName}.`);
+    t.is(result.data.text, `Evening, ${basicPlayer1.displayName}.`);
+});
+
+test('should recognise a registered player', async t => {
+    const result = await sendCommand('/whoami', playerOneChatId);
+    t.is(result.data.text, 'Player 1');
+});
+
+test('should regard an unregistered player as anonymous', async t => {
+    const result = await sendCommand('/whoami');
+    t.is(result.data.text, `I don't know`);
 });
 
 test('should provide next round date on nextfixture command', async t => {
@@ -65,18 +84,23 @@ test('should provide next round date on nextfixture command', async t => {
     t.is(result.data.text, 'Next matches: Tue 14th Jan (Cup Quarter Finals)');
 });
 
-test('should provide players next round date on mynextfixture command - home fixture', async t => {
-    const result = await sendCommand('/mynextfixture');
+test(`should provide player's next round date on mynextfixture command - home fixture`, async t => {
+    const result = await sendCommand('/mynextfixture', playerOneChatId);
     t.is(
         result.data.text,
-        'Next match: (H) Sat 25th Jan (League Game 25) v The Treasury All Stars'
+        'Next match: (H) Sat 25th Jan (Cup Semi Finals) v The Treasury All Stars'
     );
 });
 
 test('should provide players next round date on mynextfixture command - away fixture', async t => {
-    const result = await sendCommand('/mynextfixture');
+    const result = await sendCommand('/mynextfixture', playerTwoChatId);
     t.is(
         result.data.text,
-        'Next match: (A) Sat 1st Feb (Cup Semi Final) v Epic Tom'
+        'Next match: (A) Sat 1st Feb (League Game 25) v Epic Tom'
     );
+});
+
+test('should handle anonymous player on mynextfixture command', async t => {
+    const result = await sendCommand('/mynextfixture');
+    t.is(result.data.text, 'Who are you? Who are you?');
 });
