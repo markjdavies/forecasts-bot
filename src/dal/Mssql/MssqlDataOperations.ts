@@ -63,7 +63,7 @@ export class MssqlDataOperations implements DataOperations {
         const request = await this.getRequest();
         request.input('playerId', sql.Int, playerId);
         const result = await request.execute<RoundDate>(
-            'telegram.GetMyNextFixture'
+            'telegram.GetPlayersNextFixture'
         );
         return result.recordsets[0][0];
     }
