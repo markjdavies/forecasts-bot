@@ -1,125 +1,101 @@
 {
-    "env": {
-        "browser": true,
-        "es6": true,
-        "node": true
-    },
-    "parserOptions": {
-        "sourceType": "module"
-    },
-    "overrides": [
-        {
-            "files": "*.ts",
-            "extends": ["./typescript.json"]
-        },
-        {
-            "files": "test/**/*.ts",
-            "rules": {
-                "@typescript-eslint/typedef": "off",
-                "@typescript-eslint/explicit-function-return-type": "off"
-            }
-        },
-        {
-            "files": "*.vue",
-            "extends": [
-                "plugin:vue/recommended",
-                "./vue.json"
-            ]
-        }
-    ],
-    "rules": {
-        "no-constant-condition": "error",
-        "no-cond-assign": "error",
-        "comma-dangle": "error",
-        "no-console": "error",
-        "no-debugger": "error",
-        "no-duplicate-case": "error",
-        "no-control-regex": "error",
-        "quote-props": [
-            "error",
-            "consistent-as-needed"
-        ],
-        "no-empty-character-class": "error",
-        "no-ex-assign": "error",
-        "no-extra-boolean-cast": "error",
-        "no-extra-semi": "error",
-        "no-inner-declarations": [
-            "error",
-            "functions"
-        ],
-        "no-invalid-regexp": "error",
-        "no-irregular-whitespace": "error",
-        "no-regex-spaces": "error",
-        "no-sparse-arrays": "error",
-        "no-unexpected-multiline": "error",
-        "no-unsafe-finally": "error",
-        "use-isnan": "error",
-        "valid-typeof": "error",
-        "complexity": [
-            "error",
-            {
-                "max": 35
-            }
-        ],
-        "curly": "error",
-        "default-case": "error",
-        "eqeqeq": [
-            "error",
-            "smart"
-        ],
-        "guard-for-in": "error",
-        "no-eval": "error",
-        "no-empty": "error",
-        "no-redeclare": "error",
-        "radix": "error",
-        "handle-callback-err": [
-            "error",
-            "error"
-        ],
-        "prefer-const": "error",
-        "eol-last": "error",
-        "spaced-comment": "error",
-        "indent": [
-            "error",
-            4,
-            {
-                "SwitchCase": 1,
-                "flatTernaryExpressions": false,
-                "ignoreComments": false
-            }
-        ],
-        "no-trailing-spaces": "error",
-        "no-var": "error",
-        "semi": [
-            "error",
-            "always"
-        ],
-        "space-in-parens": [
-            "error",
-            "never"
-        ],
-        "object-curly-spacing": [
-            "error",
-            "always"
-        ],
-        "array-bracket-spacing": [
-            "error",
-            "never"
-        ],
-        "no-fallthrough": "error",
-        "quotes": [
-            "error",
-            "single",
-            {
-                "allowTemplateLiterals": true
-            }
-        ],
-        "object-shorthand": "error",
-        "max-len": [
-            "warn",
-            {
-                "code": 120
-            }
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "overrides": [
+    {
+      "files": "*.ts",
+      "rules": {
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": [
+          "error",
+          { "argsIgnorePattern": "^_" }
         ]
+      },
+      "extends": ["./typescript.json"]
+    },
+    {
+      "files": "test/**/*.ts",
+      "rules": {
+        "@typescript-eslint/typedef": "off",
+        "@typescript-eslint/explicit-function-return-type": "off"
+      }
     }
+  ],
+  "rules": {
+    "no-constant-condition": "error",
+    "no-cond-assign": "error",
+    "comma-dangle": "error",
+    "no-console": "error",
+    "no-debugger": "error",
+    "no-duplicate-case": "error",
+    "no-control-regex": "error",
+    "quote-props": ["error", "consistent-as-needed"],
+    "no-empty-character-class": "error",
+    "no-ex-assign": "error",
+    "no-extra-boolean-cast": "error",
+    "no-extra-semi": "error",
+    "no-inner-declarations": ["error", "functions"],
+    "no-invalid-regexp": "error",
+    "no-irregular-whitespace": "error",
+    "no-regex-spaces": "error",
+    "no-sparse-arrays": "error",
+    "no-unexpected-multiline": "error",
+    "no-unsafe-finally": "error",
+    "use-isnan": "error",
+    "valid-typeof": "error",
+    "complexity": [
+      "error",
+      {
+        "max": 35
+      }
+    ],
+    "curly": "error",
+    "default-case": "error",
+    "eqeqeq": ["error", "smart"],
+    "guard-for-in": "error",
+    "no-eval": "error",
+    "no-empty": "error",
+    "no-redeclare": "error",
+    "radix": "error",
+    "handle-callback-err": ["error", "error"],
+    "prefer-const": "error",
+    "eol-last": "error",
+    "spaced-comment": "error",
+    "indent": [
+      "error",
+      4,
+      {
+        "SwitchCase": 1,
+        "flatTernaryExpressions": false,
+        "ignoreComments": false
+      }
+    ],
+    "no-trailing-spaces": "error",
+    "no-var": "error",
+    "semi": ["error", "always"],
+    "space-in-parens": ["error", "never"],
+    "object-curly-spacing": ["error", "always"],
+    "array-bracket-spacing": ["error", "never"],
+    "no-fallthrough": "error",
+    "quotes": [
+      "error",
+      "single",
+      {
+        "allowTemplateLiterals": true
+      }
+    ],
+    "object-shorthand": "error",
+    "max-len": [
+      "warn",
+      {
+        "code": 120
+      }
+    ]
+  }
 }

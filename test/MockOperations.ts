@@ -6,7 +6,7 @@ import {
     playerHomeFixture,
     playerAwayFixture,
     playerOneChatId,
-    playerTwoChatId
+    playerTwoChatId,
 } from './fixtures/Fixtures';
 import { basicPlayer1, basicPlayer2 } from './fixtures/PlayerFixtures';
 import { RoundDate } from '~src/dataModel/RoundDate';
@@ -43,7 +43,7 @@ export class MockOperations implements DataOperations {
         _playerId: number,
         _chatId: number
     ): Promise<void> {
-        return;
+        return Promise.resolve();
     }
 
     public async GetPlayerFromChatId(chatId: number): Promise<Player> {

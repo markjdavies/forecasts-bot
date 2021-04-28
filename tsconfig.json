@@ -1,26 +1,24 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "es6",
-        "alwaysStrict": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "resolveJsonModule": true,
-        "skipLibCheck": true,
-        "removeComments": true,
-        "preserveConstEnums": true,
-        "sourceMap": true,
-        "mapRoot": "./",
-        "rootDir": "./",
-        "baseUrl": ".",
-        "paths": {
-            "~client/*": ["client/*"],
-            "~src/*": ["src/*"],
-            "~test/*": ["test/*"],
-            "~fixtures/*": ["test/fixtures/*"]
-        }
-    },
-    "exclude": [
-        "node_modules"
-    ]
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "alwaysStrict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "mapRoot": "./",
+    "rootDir": "./",
+    "baseUrl": ".",
+    "paths": {
+      "~client/*": ["client/*"],
+      "~src/*": ["src/*"],
+      "~test/*": ["test/*"],
+      "~fixtures/*": ["test/fixtures/*"]
+    }
+  },
+  "exclude": ["node_modules", ".history"]
 }
