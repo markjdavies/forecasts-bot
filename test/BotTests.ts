@@ -27,10 +27,13 @@ const mw = [
 
 const bot = forecastsBot(settings, mw);
 
-bot.startWebhook(`/${secretPath}`, null, port);
+const hookPath = `http://127.0.0.1:${port}/${secretPath}`;
+bot.launch({
+    webhook: { hookPath },
+});
 
 const client = new TelegrafTest({
-    url: `http://127.0.0.1:${port}/${secretPath}`,
+    url: hookPath,
 });
 
 const sendCommand = async (text: string, chatId: number = 1) => {

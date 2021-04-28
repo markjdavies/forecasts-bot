@@ -7,17 +7,19 @@ export const authenticateFromInvitation = (
     const operations = settings.dataOperations;
 
     const mw = async (ctx: ForecastsContext, next: Function): Promise<void> => {
-        if (ctx.message.text.indexOf('/start ') >= 0) {
-            const invitationGuid = ctx.message.text.replace('/start ', '');
-            const player = await operations.GetPlayerFromInvitationId(
-                invitationGuid
-            );
-            if (player) {
-                await operations.SetPlayerChatId(
-                    player.playerId,
-                    ctx.message.chat?.id
+        if ('text' in ctx.message) {
+            if (ctx.message.text.indexOf('/start ') >= 0) {
+                const invitationGuid = ctx.message.text.replace('/start ', '');
+                const player = await operations.GetPlayerFromInvitationId(
+                    invitationGuid
                 );
-                ctx.player = player;
+                if (player) {
+                    await operations.SetPlayerChatId(
+                        player.playerId,
+                        ctx.message.chat?.id
+                    );
+                    ctx.player = player;
+                }
             }
         }
         await next();

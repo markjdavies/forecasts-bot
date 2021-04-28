@@ -1,4 +1,4 @@
-import Telegraf, { Middleware } from 'telegraf';
+import { Telegraf, Middleware } from 'telegraf';
 import { ForecastsContext } from './ForecastsContext';
 import { Settings } from './Settings';
 import { RoundDate } from './dataModel/RoundDate';
