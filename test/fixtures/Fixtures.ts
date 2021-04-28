@@ -7,7 +7,7 @@ export const playerTwoChatId: number = 22222222;
 
 export const roundDate: RoundDate = {
     date: new Date('14 January 2020'),
-    roundName: 'Cup Quarter Finals'
+    roundName: 'Cup Quarter Finals',
 };
 
 export const playerHomeFixture: PlayerFixtureDate = {
@@ -15,7 +15,7 @@ export const playerHomeFixture: PlayerFixtureDate = {
     roundName: 'Cup Semi Finals',
     home: 1,
     away: 14,
-    awayTeam: 'The Treasury All Stars'
+    awayTeam: 'The Treasury All Stars',
 };
 
 export const playerAwayFixture: PlayerFixtureDate = {
@@ -23,5 +23,5 @@ export const playerAwayFixture: PlayerFixtureDate = {
     roundName: 'League Game 25',
     home: 13,
     away: 2,
-    homeTeam: 'Epic Tom'
+    homeTeam: 'Epic Tom',
 };
