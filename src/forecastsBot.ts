@@ -2,7 +2,7 @@ import Telegraf, { Middleware } from 'telegraf';
 import { ForecastsContext } from './ForecastsContext';
 import { Settings } from './Settings';
 import { RoundDate } from './dataModel/RoundDate';
-import * as moment from 'moment';
+import { format } from 'fecha';
 import { PlayerFixtureDate } from './dataModel/PlayerFixtureDate';
 
 export const forecastsBot = (
@@ -36,19 +36,16 @@ export const forecastsBot = (
 
     bot.command('nextfixture', async (ctx: ForecastsContext) => {
         const nextFixtures: RoundDate = await operations.GetNextFixture();
-        const formattedDate = moment(nextFixtures.date).format('ddd Do MMM');
+        const formattedDate = format(nextFixtures.date, 'ddd Do MMM');
         ctx.reply(`Next matches: ${formattedDate} (${nextFixtures.roundName})`);
     });
 
     bot.command('mynextfixture', async (ctx: ForecastsContext) => {
         if (ctx.player) {
-            const nextFixtures: PlayerFixtureDate = await operations.GetMyNextFixture(
-                ctx.player.playerId
-            );
+            const nextFixtures: PlayerFixtureDate =
+                await operations.GetMyNextFixture(ctx.player.playerId);
             const homeOrAway = nextFixtures.awayTeam ? 'H' : 'A';
-            const formattedDate = moment(nextFixtures.date).format(
-                'ddd Do MMM'
-            );
+            const formattedDate = format(nextFixtures.date, 'ddd Do MMM');
             const opponent = nextFixtures.homeTeam
                 ? nextFixtures.homeTeam
                 : nextFixtures.awayTeam;
