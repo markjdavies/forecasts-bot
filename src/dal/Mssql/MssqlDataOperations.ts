@@ -2,15 +2,12 @@ import { DataOperations } from '../DataOperations';
 import * as sql from 'mssql';
 import { Player } from '~src/dataModel/Player';
 import { RoundDate } from '~src/dataModel/RoundDate';
+import { DbConnectionConfig } from './DbConnectionConfig';
 
 export class MssqlDataOperations implements DataOperations {
     private _connectString: string;
-    constructor(
-        dbUsername: string,
-        dbPassword: string,
-        dbHostName: string,
-        databaseName: string
-    ) {
+    constructor(config: DbConnectionConfig) {
+        const { dbUsername, dbPassword, dbHostName, databaseName } = config;
         this._connectString = `mssql://${dbUsername}:${dbPassword}@${dbHostName}/${databaseName}`;
     }
 

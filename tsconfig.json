@@ -20,5 +20,5 @@
       "~fixtures/*": ["test/fixtures/*"]
     }
   },
-  "exclude": ["node_modules", ".history"]
+  "include": ["src/**/*", "test/**/*"]
 }
