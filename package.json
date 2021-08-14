@@ -25,7 +25,6 @@
   "author": "Mark Davies",
   "license": "MIT",
   "dependencies": {
-    "@amaurym/now-middleware": "^0.2.2",
     "@vercel/node": "^1.12.1",
     "express": "^4.17.1",
     "fecha": "^4.2.1",
