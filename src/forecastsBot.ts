@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import Telegraf, { Middleware } from 'telegraf';
 import { ForecastsContext } from './ForecastsContext';
 import { Settings } from './Settings';
@@ -15,6 +16,7 @@ export const forecastsBot = (
     middlewares.map((mw: Middleware<ForecastsContext>) => bot.use(mw));
 
     bot.start((ctx: ForecastsContext) => {
+        console.info('Bot started');
         if (ctx.player) {
             ctx.reply(`Evening, ${ctx.player.displayName}.`);
         } else {
@@ -22,11 +24,13 @@ export const forecastsBot = (
         }
     });
 
-    bot.command('good', (ctx: ForecastsContext) =>
-        ctx.reply('Good, good, good!')
-    );
+    bot.command('good', (ctx: ForecastsContext) => {
+        console.info("Heard 'good'");
+        ctx.reply('Good, good, good!');
+    });
 
     bot.command('whoami', (ctx: ForecastsContext) => {
+        console.info("Heard 'whoami'");
         if (ctx.player) {
             ctx.reply(ctx.player.displayName);
         } else {
@@ -35,12 +39,14 @@ export const forecastsBot = (
     });
 
     bot.command('nextfixture', async (ctx: ForecastsContext) => {
+        console.info("Heard 'nextfixture'");
         const nextFixtures: RoundDate = await operations.GetNextFixture();
         const formattedDate = format(nextFixtures.date, 'ddd Do MMM');
         ctx.reply(`Next matches: ${formattedDate} (${nextFixtures.roundName})`);
     });
 
     bot.command('mynextfixture', async (ctx: ForecastsContext) => {
+        console.info("Heard 'mynextfixture'");
         if (ctx.player) {
             const nextFixtures: PlayerFixtureDate =
                 await operations.GetMyNextFixture(ctx.player.playerId);
