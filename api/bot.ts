@@ -5,9 +5,12 @@ import { authenticateFromChatId } from '../src/middleware/authenticateFromChatId
 import { authenticateFromInvitation } from '../src/middleware/authenticateFromInvitation';
 import { forecastsBot } from '../src/forecastsBot';
 
-const handler = (_req: VercelRequest, res: VercelResponse): void => {
-    res.status(200).send('Bot request handled.');
-};
+async function handler(
+    _req: VercelRequest,
+    res: VercelResponse
+): Promise<void> {
+    res.send('Bot request handled.');
+}
 
 const mw = [
     authenticateFromInvitation(settings),
