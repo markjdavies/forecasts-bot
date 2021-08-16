@@ -1,3 +1,4 @@
+import * as pino from 'pino';
 import test from 'ava';
 import * as TelegrafTest from 'telegraf-test';
 import { Settings } from '../src/Settings';
@@ -12,12 +13,18 @@ import {
 } from './fixtures/Fixtures';
 import { basicPlayer1 } from './fixtures/PlayerFixtures';
 
+const log = pino({
+    name: 'forecasts-bot-tests',
+    level: 'error',
+});
+
 const port = 3000;
 const secretPath = 'secret-path';
 
 const settings: Settings = {
     tokenId: 'ABCD:1234567890',
     dataOperations: new MockOperations(),
+    log,
 };
 
 const mw = [
