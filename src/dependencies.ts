@@ -1,4 +1,6 @@
-import * as pino from 'pino';
+/* eslint-disable @typescript-eslint/no-require-imports */
+import pino = require('pino');
+/* eslint-enable @typescript-eslint/no-require-imports */
 import { DbConnectionConfigModel } from './dal/Mssql/DbConnectionConfig';
 import { MssqlDataOperations } from './dal/Mssql/MssqlDataOperations';
 
