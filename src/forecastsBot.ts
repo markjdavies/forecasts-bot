@@ -2,44 +2,67 @@ import { Settings } from './Settings';
 import { VercelRequest, VercelResponse } from '@vercel/node';
 // eslint-disable-next-line
 import TelegramBot = require('node-telegram-bot-api');
+import { Logger } from 'pino';
 // import { RoundDate } from './dataModel/RoundDate';
 // import { format } from 'fecha';
 // import { PlayerFixtureDate } from './dataModel/PlayerFixtureDate';
+
+type MessageHandler = () => string;
+type MessageRouter = (update: TelegramBot.Update) => MessageHandler;
+
+const messageHandlerMapper = (log: Logger): MessageRouter => {
+    return (update: TelegramBot.Update): MessageHandler => {
+        const start = (): string => {
+            log.debug('Bot started');
+            return 'Evening, chief.';
+        };
+
+        const good = (): string => {
+            log.info("Heard 'good'");
+            return 'Good, good, good!';
+        };
+
+        const whoAmI = (): string => {
+            log.info("Heard 'whoami'");
+            return "I don't know";
+        };
+
+        const unanticipatedRequest = (): string => {
+            log.info('Unrecognised command.');
+            return `I hear you saying '${update?.message?.text}' to me.`;
+        };
+
+        switch (update.message?.text) {
+            case '/start':
+                return start;
+            case '/good':
+                return good;
+            case '/whoami':
+                return whoAmI;
+            default:
+                return unanticipatedRequest;
+        }
+    };
+};
 
 export const forecastsBot = (
     settings: Settings
     // middlewares: Middleware<ForecastsContext>[]
 ): ((req: VercelRequest, _res: VercelResponse) => Promise<void>) => {
     const { log } = settings;
+
     const bot = new TelegramBot(settings.tokenId);
+    const messageMapper = messageHandlerMapper(log);
+
     return async (req: VercelRequest, _res: VercelResponse): Promise<void> => {
-        const { body } = req;
+        const body: TelegramBot.Update = req.body;
 
         if (body.message) {
             const {
                 chat: { id },
-                text,
             } = body.message;
 
-            let message: string;
-
-            switch (text) {
-                case '/start':
-                    log.debug('Bot started');
-                    message = 'Evening, chief.';
-                    break;
-                case '/good':
-                    log.info("Heard 'good'");
-                    message = 'Good, good, good!';
-                    break;
-                case '/whoami':
-                    log.info("Heard 'whoami'");
-                    message = "I don't know";
-                    break;
-                default:
-                    log.info('Unrecognised command.');
-                    message = `I hear you saying '${text}' to me.`;
-            }
+            const message = messageMapper(body)();
 
             await bot.sendMessage(id, message, { parse_mode: 'Markdown' });
         }
