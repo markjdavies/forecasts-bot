@@ -23,4 +23,4 @@ const handler = async (
     res.send('Bot request handled.');
 };
 
-export default chain(mw)(handler);
+export default chain(mw[0])(handler);
