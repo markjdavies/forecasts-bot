@@ -3,15 +3,19 @@ import TelegramBot = require('node-telegram-bot-api');
 import { Logger } from 'pino';
 import { Settings } from './Settings';
 import { VercelRequest, VercelResponse } from '@vercel/node';
+import { ForecastsContext } from './ForecastsContext';
 // import { RoundDate } from './dataModel/RoundDate';
 // import { format } from 'fecha';
 // import { PlayerFixtureDate } from './dataModel/PlayerFixtureDate';
 
 type MessageHandler = () => string;
-type MessageRouter = (update: TelegramBot.Update) => MessageHandler;
+type MessageRouter = (
+    ctx: ForecastsContext,
+    update: TelegramBot.Update
+) => MessageHandler;
 
 const messageHandlerMapper = (log: Logger): MessageRouter => {
-    return (update: TelegramBot.Update): MessageHandler => {
+    return (ctx, update): MessageHandler => {
         const start = (): string => {
             log.debug('Bot started');
             return 'Evening, chief.';
@@ -24,7 +28,13 @@ const messageHandlerMapper = (log: Logger): MessageRouter => {
 
         const whoAmI = (): string => {
             log.info("Heard 'whoami'");
-            return "I don't know";
+            if (ctx.player) {
+                return ctx.player.displayName;
+                // ctx.reply(ctx.player.displayName);
+            } else {
+                return "I don't know";
+                // ctx.reply(`I don't know`);
+            }
         };
 
         const unanticipatedRequest = (): string => {
@@ -54,15 +64,18 @@ export const forecastsBot = (
     const bot = new TelegramBot(settings.tokenId);
     const messageMapper = messageHandlerMapper(log);
 
-    return async (req: VercelRequest, _res: VercelResponse): Promise<void> => {
-        const body: TelegramBot.Update = req.body;
+    return async (
+        ctx: ForecastsContext,
+        _res: VercelResponse
+    ): Promise<void> => {
+        const body: TelegramBot.Update = ctx.body;
 
         if (body.message) {
             const {
                 chat: { id },
             } = body.message;
 
-            const message = messageMapper(body)();
+            const message = messageMapper(ctx, body)();
 
             await bot.sendMessage(id, message, { parse_mode: 'Markdown' });
         }

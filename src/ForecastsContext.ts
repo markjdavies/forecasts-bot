@@ -1,8 +1,8 @@
-// import { ContextMessageUpdate } from 'telegraf';
-// import { Player } from './dataModel/Player';
-// import { DataOperations } from './dal/DataOperations';
+import { Player } from './dataModel/Player';
+import { DataOperations } from './dal/DataOperations';
+import { VercelRequest } from '@vercel/node';
 
-// export interface ForecastsContext extends ContextMessageUpdate {
-//     dataOperations?: DataOperations;
-//     player?: Player;
-// }
+export interface ForecastsContext extends VercelRequest {
+    dataOperations?: DataOperations;
+    player?: Player;
+}
