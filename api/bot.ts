@@ -13,7 +13,7 @@ const handler = async (
     try {
         await bot(req, res);
     } catch (err) {
-        log.err(err, 'Error in webhook');
+        log.error(err, 'Error in webhook');
     }
     res.send('Bot request handled.');
 };
