@@ -83,7 +83,7 @@ const messageHandlerMapper = (log: Logger): MessageRouter => {
                 return whoAmI;
             case '/nextfixture':
                 return nextFixture;
-            case 'mynextfixture':
+            case '/mynextfixture':
                 return myNextFixture;
             default:
                 return unanticipatedRequest;
