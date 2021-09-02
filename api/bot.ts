@@ -5,10 +5,10 @@ import { authenticateFromChatId } from '../src/middleware/authenticateFromChatId
 // import { authenticateFromInvitation } from '../src/middleware/authenticateFromInvitation';
 import { forecastsBot } from '../src/forecastsBot';
 
-const mw = [
-    // authenticateFromInvitation(settings),
-    authenticateFromChatId(settings),
-];
+// const mw = [
+//     authenticateFromInvitation(settings),
+//     authenticateFromChatId(settings),
+// ];
 
 const bot = forecastsBot(settings);
 const handler = async (
@@ -23,4 +23,4 @@ const handler = async (
     res.send('Bot request handled.');
 };
 
-export default chain(mw[0])(handler);
+export default chain(authenticateFromChatId(settings))(handler);
