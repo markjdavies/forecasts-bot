@@ -2,6 +2,7 @@ import { VercelRequest, VercelResponse } from '@vercel/node';
 import { chain } from '@amaurym/now-middleware';
 import { log, settings } from '../src/dependencies';
 import { authenticateFromChatId } from '../src/middleware/authenticateFromChatId';
+import { configureContext } from '../src/middleware/configureContext';
 import { authenticateFromInvitation } from '../src/middleware/authenticateFromInvitation';
 import { forecastsBot } from '../src/forecastsBot';
 
@@ -19,6 +20,7 @@ const handler = async (
 };
 
 export default chain(
+    configureContext(settings),
     authenticateFromChatId(settings),
     authenticateFromInvitation(settings)
 )(handler);
