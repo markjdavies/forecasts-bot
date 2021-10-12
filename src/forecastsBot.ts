@@ -1,100 +1,121 @@
-import * as TelegramBot from 'node-telegram-bot-api';
+// eslint-disable-next-line
+import TelegramBot = require('node-telegram-bot-api');
+import { Logger } from 'pino';
 import { Settings } from './Settings';
 import { VercelRequest, VercelResponse } from '@vercel/node';
-// import { RoundDate } from './dataModel/RoundDate';
-// import { format } from 'fecha';
-// import { PlayerFixtureDate } from './dataModel/PlayerFixtureDate';
+import { ForecastsContext } from './ForecastsContext';
+import { RoundDate } from './dataModel/RoundDate';
+import { format } from 'fecha';
+import { PlayerFixtureDate } from './dataModel/PlayerFixtureDate';
+
+type MessageHandler = () => Promise<string>;
+type MessageRouter = (
+    ctx: ForecastsContext,
+    update: TelegramBot.Update
+) => MessageHandler;
+
+const messageHandlerMapper = (log: Logger): MessageRouter => {
+    return (ctx, update): MessageHandler => {
+        const start = (): Promise<string> => {
+            log.debug('Bot started');
+            if (ctx.player) {
+                return Promise.resolve(`Evening, ${ctx.player.displayName}.`);
+            } else {
+                return Promise.resolve('Evening, chief.');
+            }
+        };
+
+        const good = (): Promise<string> => {
+            log.info("Heard 'good'");
+            return Promise.resolve('Good, good, good!');
+        };
+
+        const whoAmI = (): Promise<string> => {
+            log.info("Heard 'whoami'");
+            if (ctx.player) {
+                return Promise.resolve(ctx.player.displayName);
+                // ctx.reply(ctx.player.displayName);
+            } else {
+                return Promise.resolve("I don't know");
+                // ctx.reply(`I don't know`);
+            }
+        };
+
+        const nextFixture = async (): Promise<string> => {
+            log.info("Heard 'nextfixture'");
+            const nextFixtures: RoundDate =
+                await ctx.dataOperations?.GetNextFixture();
+            const formattedDate = format(nextFixtures.date, 'ddd Do MMM');
+            return `Next matches: ${formattedDate} (${nextFixtures.roundName})`;
+        };
+
+        const myNextFixture = async (): Promise<string> => {
+            log.info("Heard 'mynextfixture'");
+            if (ctx.player) {
+                const nextFixtures: PlayerFixtureDate =
+                    await ctx.dataOperations?.GetMyNextFixture(
+                        ctx.player.playerId
+                    );
+                const homeOrAway = nextFixtures.awayTeam ? 'H' : 'A';
+                const formattedDate = format(nextFixtures.date, 'ddd Do MMM');
+                const opponent = nextFixtures.homeTeam
+                    ? nextFixtures.homeTeam
+                    : nextFixtures.awayTeam;
+                return `Next match: (${homeOrAway}) ${formattedDate} (${nextFixtures.roundName}) v ${opponent}`;
+            } else {
+                return 'Who are you? Who are you?';
+            }
+        };
+
+        const unanticipatedRequest = (): Promise<string> => {
+            log.info('Unrecognised command.');
+            return Promise.resolve(
+                `I hear you saying '${update?.message?.text}' to me.`
+            );
+        };
+
+        switch (update.message?.text) {
+            case '/start':
+                return start;
+            case '/good':
+                return good;
+            case '/whoami':
+                return whoAmI;
+            case '/nextfixture':
+                return nextFixture;
+            case '/mynextfixture':
+                return myNextFixture;
+            default:
+                return unanticipatedRequest;
+        }
+    };
+};
 
 export const forecastsBot = (
     settings: Settings
     // middlewares: Middleware<ForecastsContext>[]
 ): ((req: VercelRequest, _res: VercelResponse) => Promise<void>) => {
     const { log } = settings;
+
     const bot = new TelegramBot(settings.tokenId);
-    return async (req: VercelRequest, _res: VercelResponse): Promise<void> => {
-        const { body } = req;
+    const messageMapper = messageHandlerMapper(log);
+
+    return async (
+        ctx: ForecastsContext,
+        _res: VercelResponse
+    ): Promise<void> => {
+        const body: TelegramBot.Update = ctx.body;
 
         if (body.message) {
             const {
                 chat: { id },
-                text,
             } = body.message;
 
-            let message: string;
+            const message = messageMapper(ctx, body)();
 
-            switch (text) {
-                case '/start':
-                    log.debug('Bot started');
-                    message = 'Evening, chief.';
-                    break;
-                case '/good':
-                    log.info("Heard 'good'");
-                    message = 'Good, good, good!';
-                    break;
-                case '/whoami':
-                    log.info("Heard 'whoami'");
-                    message = "I don't know";
-                    break;
-                default:
-                    log.info('Unrecognised command.');
-                    message = `I hear you saying '${text}' to me.`;
-            }
-
-            await bot.sendMessage(id, message, { parse_mode: 'Markdown' });
+            await bot.sendMessage(id, await message, {
+                parse_mode: 'Markdown',
+            });
         }
     };
-
-    // const operations = settings.dataOperations;
-
-    // middlewares.map((mw: Middleware<ForecastsContext>) => bot.use(mw));
-
-    // bot.start((ctx: ForecastsContext) => {
-    //     log.debug('Bot started');
-    //     if (ctx.player) {
-    //         ctx.reply(`Evening, ${ctx.player.displayName}.`);
-    //     } else {
-    //         ctx.reply('Evening, chief.');
-    //     }
-    // });
-
-    // bot.command('good', (ctx: ForecastsContext) => {
-    //     log.info("Heard 'good'");
-    //     ctx.reply('Good, good, good!');
-    // });
-
-    // bot.command('whoami', (ctx: ForecastsContext) => {
-    //     log.info("Heard 'whoami'");
-    //     if (ctx.player) {
-    //         ctx.reply(ctx.player.displayName);
-    //     } else {
-    //         ctx.reply(`I don't know`);
-    //     }
-    // });
-
-    // bot.command('nextfixture', async (ctx: ForecastsContext) => {
-    //     log.info("Heard 'nextfixture'");
-    //     const nextFixtures: RoundDate = await operations.GetNextFixture();
-    //     const formattedDate = format(nextFixtures.date, 'ddd Do MMM');
-    //     ctx.reply(`Next matches: ${formattedDate} (${nextFixtures.roundName})`);
-    // });
-
-    // bot.command('mynextfixture', async (ctx: ForecastsContext) => {
-    //     log.info("Heard 'mynextfixture'");
-    //     if (ctx.player) {
-    //         const nextFixtures: PlayerFixtureDate =
-    //             await operations.GetMyNextFixture(ctx.player.playerId);
-    //         const homeOrAway = nextFixtures.awayTeam ? 'H' : 'A';
-    //         const formattedDate = format(nextFixtures.date, 'ddd Do MMM');
-    //         const opponent = nextFixtures.homeTeam
-    //             ? nextFixtures.homeTeam
-    //             : nextFixtures.awayTeam;
-    //         ctx.reply(
-    //             `Next match: (${homeOrAway}) ${formattedDate} (${nextFixtures.roundName}) v ${opponent}`
-    //         );
-    //     } else {
-    //         ctx.reply('Who are you? Who are you?');
-    //     }
-    // });
-
-    // return bot;
 };
