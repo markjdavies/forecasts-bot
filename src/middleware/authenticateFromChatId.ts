@@ -1,32 +1,19 @@
-import { VercelResponse } from '@vercel/node';
-import { ForecastsContext } from '~src/ForecastsContext';
-import { Settings } from '~src/Settings';
+import { ForecastsContext } from '../ForecastsContext';
+import { NextFunction } from 'grammy';
 
-export const authenticateFromChatId = (
-    settings: Settings
-): ((
+export const authenticateFromChatId = async (
     ctx: ForecastsContext,
-    res: VercelResponse,
-    next: Function
-) => Promise<void>) => {
-    const { log } = settings;
-    const operations = settings.dataOperations;
-
-    const mw = async (
-        ctx: ForecastsContext,
-        _res: VercelResponse,
-        next: Function
-    ): Promise<void> => {
-        const chatId = ctx.body?.message?.chat?.id;
-        const player = await operations.GetPlayerFromChatId(chatId);
-
-        if (player) {
-            log.info(`Recognised ${player.displayName}`);
-            ctx.player = player;
-        } else {
-            log.info('Did not recognise player from chatId');
-        }
-        await next();
-    };
-    return mw;
+    next: NextFunction
+) => {
+    const log = ctx.log;
+    const operations = ctx.dataOperations;
+    const chatId = ctx.message.chat.id;
+    const player = await operations.GetPlayerFromChatId(chatId);
+    if (player) {
+        log.info(`Recognised ${player.displayName}`);
+        ctx.player = player;
+    } else {
+        log.info('Did not recognise player from chatId');
+    }
+    await next();
 };

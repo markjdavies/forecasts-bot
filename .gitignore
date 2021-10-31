@@ -114,3 +114,5 @@ deploy
 *.d.ts
 config/local.json
 .history/
+
+!jest.config.js
