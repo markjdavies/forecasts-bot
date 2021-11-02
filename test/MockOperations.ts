@@ -13,46 +13,39 @@ import { RoundDate } from '~src/dataModel/RoundDate';
 import { PlayerFixtureDate } from '~src/dataModel/PlayerFixtureDate';
 
 export class MockOperations implements DataOperations {
-    public async GetNextFixture(): Promise<RoundDate> {
-        return roundDate;
+    public GetNextFixture(): Promise<RoundDate> {
+        return Promise.resolve(roundDate);
     }
 
-    public async GetMyNextFixture(
-        playerId: number
-    ): Promise<PlayerFixtureDate> {
+    public GetMyNextFixture(playerId: number): Promise<PlayerFixtureDate> {
         if (playerId === playerHomeFixture.home) {
-            return playerHomeFixture;
+            return Promise.resolve(playerHomeFixture);
         } else if (playerId === playerAwayFixture.away) {
-            return playerAwayFixture;
+            return Promise.resolve(playerAwayFixture);
         } else {
-            return null;
+            return Promise.reject();
         }
     }
 
-    public async GetPlayerFromInvitationId(
-        invitationGuid: string
-    ): Promise<Player> {
+    public GetPlayerFromInvitationId(invitationGuid: string): Promise<Player> {
         if (invitationGuid === validInvitationId) {
-            return basicPlayer1;
+            return Promise.resolve(basicPlayer1);
         } else {
-            return null;
+            return Promise.reject();
         }
     }
 
-    public async SetPlayerChatId(
-        _playerId: number,
-        _chatId: number
-    ): Promise<void> {
+    public SetPlayerChatId(_playerId: number, _chatId: number): Promise<void> {
         return Promise.resolve();
     }
 
-    public async GetPlayerFromChatId(chatId: number): Promise<Player> {
+    public GetPlayerFromChatId(chatId: number): Promise<Player> {
         if (chatId === playerOneChatId) {
-            return basicPlayer1;
+            return Promise.resolve(basicPlayer1);
         } else if (chatId === playerTwoChatId) {
-            return basicPlayer2;
+            return Promise.resolve(basicPlayer2);
         } else {
-            return null;
+            return Promise.reject();
         }
     }
 }

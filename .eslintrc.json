@@ -11,7 +11,10 @@
     "overrides": [
         {
             "files": ["*.ts", "*.tsx"],
-            "extends": ["./typescript.json"]
+            "extends": ["./typescript.json"],
+            "rules": {
+                "@typescript-eslint/explicit-function-return-type": "off"
+            }
         },
         {
             "files": ["test/**/*.ts", "client/test/**/*.ts"],

@@ -1,125 +1,77 @@
 import { Bot } from 'grammy';
 import { ForecastsContext } from './ForecastsContext';
-import { RoundDate } from './dataModel/RoundDate';
 import { format } from 'fecha';
-import { PlayerFixtureDate } from './dataModel/PlayerFixtureDate';
 
-export const forecastsBot = (token: string): Bot => {
+export const forecastsBot = (token: string) => {
     const bot = new Bot<ForecastsContext>(token);
-    bot.command('good', async (ctx) => {
-        await ctx.reply('Good, good, good!');
-    });
+
+    handleStart(bot);
+    handleGood(bot);
+    handleWhoAmI(bot);
+    handleNextfixture(bot);
+    handleMyNextFixture(bot);
+
     return bot;
 };
 
-// type MessageHandler = () => Promise<string>;
-// type MessageRouter = (
-//     ctx: ForecastsContext,
-//     update: TelegramBot.Update
-// ) => MessageHandler;
+function handleStart(bot: Bot<ForecastsContext>) {
+    bot.command('start', async (ctx) => {
+        ctx.log.debug('Bot started');
+        if (ctx.player) {
+            await ctx.reply(`Evening, ${ctx.player.displayName}.`);
+        } else {
+            await ctx.reply('Evening, chief.');
+        }
+    });
+}
 
-// const messageHandlerMapper = (log: Logger): MessageRouter => {
-//     return (ctx, update): MessageHandler => {
-//         const start = (): Promise<string> => {
-//             log.debug('Bot started');
-//             if (ctx.player) {
-//                 return Promise.resolve(`Evening, ${ctx.player.displayName}.`);
-//             } else {
-//                 return Promise.resolve('Evening, chief.');
-//             }
-//         };
+function handleGood(bot: Bot<ForecastsContext>) {
+    bot.command('good', async (ctx) => {
+        ctx.log.info("Heard 'good'");
+        await ctx.reply('Good, good, good!');
+    });
+}
 
-//         const good = (): Promise<string> => {
-//             log.info("Heard 'good'");
-//             return Promise.resolve('Good, good, good!');
-//         };
+function handleWhoAmI(bot: Bot<ForecastsContext>) {
+    bot.command('whoAmI', async (ctx) => {
+        ctx.log.info("Heard 'whoAmI'");
+        if (ctx.player) {
+            await ctx.reply(ctx.player.displayName);
+        } else {
+            await ctx.reply(`🤷`);
+        }
+    });
+}
 
-//         const whoAmI = (): Promise<string> => {
-//             log.info("Heard 'whoami'");
-//             if (ctx.player) {
-//                 return Promise.resolve(ctx.player.displayName);
-//                 // ctx.reply(ctx.player.displayName);
-//             } else {
-//                 return Promise.resolve("I don't know");
-//                 // ctx.reply(`I don't know`);
-//             }
-//         };
+function handleNextfixture(bot: Bot<ForecastsContext>) {
+    bot.command('nextfixture', async (ctx) => {
+        ctx.log.info("Heard 'nextfixture'");
+        if (!ctx.dataOperations) {
+            throw new Error('No data operations in context');
+        }
+        const nextFixtures = await ctx.dataOperations.GetNextFixture();
+        const formattedDate = format(nextFixtures.date, 'ddd Do MMM');
+        await ctx.reply(`Next matches: ${formattedDate} (${nextFixtures.roundName})`);
+    });
+}
 
-//         const nextFixture = async (): Promise<string> => {
-//             log.info("Heard 'nextfixture'");
-//             const nextFixtures: RoundDate =
-//                 await ctx.dataOperations?.GetNextFixture();
-//             const formattedDate = format(nextFixtures.date, 'ddd Do MMM');
-//             return `Next matches: ${formattedDate} (${nextFixtures.roundName})`;
-//         };
+function handleMyNextFixture(bot: Bot<ForecastsContext>) {
+    bot.command('mynextfixture', async (ctx) => {
+        ctx.log.info("Heard 'mynextfixture'");
+        if (!ctx.dataOperations) {
+            throw new Error('No data operations in context');
+        }
 
-//         const myNextFixture = async (): Promise<string> => {
-//             log.info("Heard 'mynextfixture'");
-//             if (ctx.player) {
-//                 const nextFixtures: PlayerFixtureDate =
-//                     await ctx.dataOperations?.GetMyNextFixture(
-//                         ctx.player.playerId
-//                     );
-//                 const homeOrAway = nextFixtures.awayTeam ? 'H' : 'A';
-//                 const formattedDate = format(nextFixtures.date, 'ddd Do MMM');
-//                 const opponent = nextFixtures.homeTeam
-//                     ? nextFixtures.homeTeam
-//                     : nextFixtures.awayTeam;
-//                 return `Next match: (${homeOrAway}) ${formattedDate} (${nextFixtures.roundName}) v ${opponent}`;
-//             } else {
-//                 return 'Who are you? Who are you?';
-//             }
-//         };
-
-//         const unanticipatedRequest = (): Promise<string> => {
-//             log.info('Unrecognised command.');
-//             return Promise.resolve(
-//                 `I hear you saying '${update?.message?.text}' to me.`
-//             );
-//         };
-
-//         switch (update.message?.text) {
-//             case '/start':
-//                 return start;
-//             case '/good':
-//                 return good;
-//             case '/whoami':
-//                 return whoAmI;
-//             case '/nextfixture':
-//                 return nextFixture;
-//             case '/mynextfixture':
-//                 return myNextFixture;
-//             default:
-//                 return unanticipatedRequest;
-//         }
-//     };
-// };
-
-// export const forecastsBot = (
-//     settings: Settings
-//     // middlewares: Middleware<ForecastsContext>[]
-// ): ((req: VercelRequest, _res: VercelResponse) => Promise<void>) => {
-//     const { log } = settings;
-
-//     const bot = new Bot(settings.tokenId);
-//     const messageMapper = messageHandlerMapper(log);
-
-//     return async (
-//         ctx: ForecastsContext,
-//         _res: VercelResponse
-//     ): Promise<void> => {
-//         const body: TelegramBot.Update = ctx.body;
-
-//         if (body.message) {
-//             const {
-//                 chat: { id },
-//             } = body.message;
-
-//             const message = messageMapper(ctx, body)();
-
-//             await bot.sendMessage(id, await message, {
-//                 parse_mode: 'Markdown',
-//             });
-//         }
-//     };
-// };
+        if (ctx.player) {
+            const nextFixtures = await ctx.dataOperations?.GetMyNextFixture(ctx.player.playerId);
+            const homeOrAway = nextFixtures.awayTeam ? 'H' : 'A';
+            const formattedDate = format(nextFixtures.date, 'ddd Do MMM');
+            const opponent = nextFixtures.homeTeam ? nextFixtures.homeTeam : nextFixtures.awayTeam;
+            await ctx.reply(
+                `Next match: (${homeOrAway}) ${formattedDate} (${nextFixtures.roundName}) v ${opponent}`
+            );
+        } else {
+            await ctx.reply('Who are you? Who are you?');
+        }
+    });
+}
