@@ -34,6 +34,7 @@
         "pino": "^7.0.5"
     },
     "devDependencies": {
+        "@types/jest": "^27.0.2",
         "@types/mssql": "^7.1.4",
         "@typescript-eslint/eslint-plugin": "^4.22.0",
         "@typescript-eslint/parser": "^5.3.0",
@@ -42,9 +43,11 @@
         "eslint-config-prettier": "^8.3.0",
         "eslint-plugin-prettier": "^4.0.0",
         "husky": "^6.0.0",
+        "jest": "^27.3.1",
         "lint-staged": "^10.5.4",
         "nyc": "^15.0.0",
         "prettier": "^2.3.2",
+        "ts-jest": "^27.0.7",
         "typescript": "^4.2.4",
         "zod": "^3.7.1"
     },
