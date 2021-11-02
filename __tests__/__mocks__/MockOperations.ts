@@ -1,5 +1,5 @@
-import { DataOperations } from '../src/dal/DataOperations';
-import { Player } from '../src/dataModel/Player';
+import { DataOperations } from '../../src/dal/DataOperations';
+import { Player } from '../../src/dataModel/Player';
 import {
     validInvitationId,
     roundDate,
@@ -7,10 +7,10 @@ import {
     playerAwayFixture,
     playerOneChatId,
     playerTwoChatId,
-} from './fixtures/Fixtures';
-import { basicPlayer1, basicPlayer2 } from './fixtures/PlayerFixtures';
-import { RoundDate } from '~src/dataModel/RoundDate';
-import { PlayerFixtureDate } from '~src/dataModel/PlayerFixtureDate';
+} from '../__fixtures__/Fixtures';
+import { basicPlayer1, basicPlayer2 } from '../__fixtures__/PlayerFixtures';
+import { RoundDate } from '../../src/dataModel/RoundDate';
+import { PlayerFixtureDate } from '../../src/dataModel/PlayerFixtureDate';
 
 export class MockOperations implements DataOperations {
     public GetNextFixture(): Promise<RoundDate> {

@@ -25,6 +25,6 @@
             "~fixtures/*": ["test/fixtures/*"]
         }
     },
-    "include": ["src/**/*", "test/**/*"],
+    "include": ["src/**/*"],
     "exclude": ["node_modules", "__tests__", "tmp", ".vscode", "jest.config.js", "coverage"]
 }
