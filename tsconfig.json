@@ -1,24 +1,30 @@
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "target": "es6",
-    "alwaysStrict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "removeComments": true,
-    "preserveConstEnums": true,
-    "sourceMap": true,
-    "mapRoot": "./",
-    "rootDir": "./",
-    "baseUrl": ".",
-    "paths": {
-      "~client/*": ["client/*"],
-      "~src/*": ["src/*"],
-      "~test/*": ["test/*"],
-      "~fixtures/*": ["test/fixtures/*"]
-    }
-  },
-  "include": ["src/**/*", "test/**/*"]
+    "compilerOptions": {
+        "module": "commonjs",
+        "lib": ["es2017"],
+        "target": "es6",
+        "strict": true,
+        "alwaysStrict": true,
+        "strictNullChecks": true,
+        "strictBindCallApply": true,
+        "strictPropertyInitialization": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "resolveJsonModule": true,
+        "skipLibCheck": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "mapRoot": "./",
+        "rootDir": "./",
+        "baseUrl": ".",
+        "paths": {
+            "~client/*": ["client/*"],
+            "~src/*": ["src/*"],
+            "~test/*": ["test/*"],
+            "~fixtures/*": ["test/fixtures/*"]
+        }
+    },
+    "include": ["src/**/*", "test/**/*"],
+    "exclude": ["node_modules", "__tests__", "tmp", ".vscode", "jest.config.js", "coverage"]
 }
