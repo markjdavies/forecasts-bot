@@ -4,8 +4,9 @@ import * as pino from 'pino';
 // import { authenticateFromInvitation } from '../src/middleware/authenticateFromInvitation';
 import { startHandler } from '../src/forecastsBot';
 import { MockOperations } from './__mocks__/MockOperations';
-// import { validInvitationId, playerOneChatId, playerTwoChatId } from '../test/fixtures/Fixtures';
-// import { basicPlayer1 } from '../test/fixtures/PlayerFixtures';
+import { validInvitationId } from './__fixtures__/Fixtures';
+// import { validInvitationId, playerOneChatId, playerTwoChatId } from './__fixtures__/Fixtures';
+import { basicPlayer1 } from './__fixtures__/PlayerFixtures';
 import { ForecastsContext } from '../src/ForecastsContext';
 
 const log = pino.pino({
@@ -40,15 +41,17 @@ describe('Forecasts bot', () => {
         expect(ctx.reply).toHaveBeenCalledWith('Evening, chief.');
     });
 
-    // test('should disregard an unrecognised invitation', async () => {
-    //     const result = await sendCommand(`/start 49b9f2b7-4c79-4523-b0f9-6ba22b5fca8d`);
-    //     expect(result.data.text).toBe(`Evening, chief.`);
-    // });
+    test('should disregard an unrecognised invitation', () => {
+        ctx!.message!.text = '/start 49b9f2b7-4c79-4523-b0f9-6ba22b5fca8d';
+        startHandler(ctx);
+        expect(ctx.reply).toHaveBeenCalledWith('Evening, chief.');
+    });
 
-    // test('should recognise an invited player', async () => {
-    //     const result = await sendCommand(`/start ${validInvitationId}`);
-    //     expect(result.data.text).toBe(`Evening, ${basicPlayer1.displayName}.`);
-    // });
+    test('should recognise an invited player', () => {
+        ctx!.message!.text = `/start ${validInvitationId}`;
+        startHandler(ctx);
+        expect(ctx.reply).toHaveBeenCalledWith(`Evening, ${basicPlayer1.displayName}.`);
+    });
 
     // test('should recognise a registered player', async () => {
     //     const result = await sendCommand('/whoami', playerOneChatId);
