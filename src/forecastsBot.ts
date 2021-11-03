@@ -15,19 +15,17 @@ export const forecastsBot = (token: string) => {
 };
 
 function handleStart(bot: Bot<ForecastsContext>) {
-    bot.command('start', startHandler());
+    bot.command('start', startHandler);
 }
 
-export function startHandler() {
-    return async (ctx: ForecastsContext) => {
-        ctx.log.debug('Bot started');
-        if (ctx.player) {
-            await ctx.reply(`Evening, ${ctx.player.displayName}.`);
-        } else {
-            await ctx.reply('Evening, chief.');
-        }
-    };
-}
+export const startHandler = async (ctx: ForecastsContext) => {
+    ctx.log.debug('Bot started');
+    if (ctx.player) {
+        await ctx.reply(`Evening, ${ctx.player.displayName}.`);
+    } else {
+        await ctx.reply('Evening, chief.');
+    }
+};
 
 function handleGood(bot: Bot<ForecastsContext>) {
     bot.command('good', async (ctx) => {
