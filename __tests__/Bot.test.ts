@@ -1,17 +1,15 @@
-import { mockDeep } from 'jest-mock-extended';
+import { mock } from 'jest-mock-extended';
 import * as pino from 'pino';
 import { authenticateFromChatId } from '../src/middleware/authenticateFromChatId';
 import { authenticateFromInvitation } from '../src/middleware/authenticateFromInvitation';
-import {
-    startHandler,
-    whoAmIHandler,
-    nextFixtureHandler,
-    myNextFixtureHandler,
-} from '../src/forecastsBot';
 import { MockOperations } from './__mocks__/MockOperations';
 import { validInvitationId, playerOneChatId } from './__fixtures__/Fixtures';
 import { basicPlayer1, basicPlayer2 } from './__fixtures__/PlayerFixtures';
 import { ForecastsContext } from '../src/ForecastsContext';
+import { startHandler } from '../src/messageHandlers/startHandler';
+import { whoAmIHandler } from '../src/messageHandlers/whoAmIHandler';
+import { nextFixtureHandler } from '../src/messageHandlers/nextFixtureHandler';
+import { myNextFixtureHandler } from '../src/messageHandlers/myNextFixtureHandler';
 
 const log = pino.pino({
     name: 'forecasts-bot-tests',
@@ -20,7 +18,7 @@ const log = pino.pino({
 
 const makeContext = (): ForecastsContext => {
     return {
-        ...mockDeep<ForecastsContext>(),
+        ...mock<ForecastsContext>(),
         log,
         dataOperations: new MockOperations(),
         message: {
