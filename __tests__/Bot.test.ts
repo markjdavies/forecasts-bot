@@ -1,12 +1,16 @@
-import { mockDeep, mockReset } from 'jest-mock-extended';
+import { mockDeep } from 'jest-mock-extended';
 import * as pino from 'pino';
-// import { authenticateFromChatId } from '../src/middleware/authenticateFromChatId';
-// import { authenticateFromInvitation } from '../src/middleware/authenticateFromInvitation';
-import { startHandler } from '../src/forecastsBot';
+import { authenticateFromChatId } from '../src/middleware/authenticateFromChatId';
+import { authenticateFromInvitation } from '../src/middleware/authenticateFromInvitation';
+import {
+    startHandler,
+    whoAmIHandler,
+    nextFixtureHandler,
+    myNextFixtureHandler,
+} from '../src/forecastsBot';
 import { MockOperations } from './__mocks__/MockOperations';
-import { validInvitationId } from './__fixtures__/Fixtures';
-// import { validInvitationId, playerOneChatId, playerTwoChatId } from './__fixtures__/Fixtures';
-import { basicPlayer1 } from './__fixtures__/PlayerFixtures';
+import { validInvitationId, playerOneChatId } from './__fixtures__/Fixtures';
+import { basicPlayer1, basicPlayer2 } from './__fixtures__/PlayerFixtures';
 import { ForecastsContext } from '../src/ForecastsContext';
 
 const log = pino.pino({
@@ -14,25 +18,28 @@ const log = pino.pino({
     level: 'error',
 });
 
-const ctx: ForecastsContext = {
-    ...mockDeep<ForecastsContext>(),
-    log,
-    dataOperations: new MockOperations(),
-    message: {
-        message_id: 1111,
-        date: Date.now(),
-        chat: {
-            type: 'private',
-            id: 2222,
-            first_name: 'Jest',
+const makeContext = (): ForecastsContext => {
+    return {
+        ...mockDeep<ForecastsContext>(),
+        log,
+        dataOperations: new MockOperations(),
+        message: {
+            message_id: 1111,
+            date: Date.now(),
+            chat: {
+                type: 'private',
+                id: 2222,
+                first_name: 'Jest',
+            },
         },
-    },
-    reply: jest.fn(),
+        reply: jest.fn(),
+    };
 };
+let ctx: ForecastsContext;
 
 describe('Forecasts bot', () => {
     beforeEach(() => {
-        mockReset(ctx);
+        ctx = makeContext();
     });
 
     test('should acknowledge an anonymous user', () => {
@@ -41,47 +48,64 @@ describe('Forecasts bot', () => {
         expect(ctx.reply).toHaveBeenCalledWith('Evening, chief.');
     });
 
-    test('should disregard an unrecognised invitation', () => {
+    test('should disregard an unrecognised invitation', async () => {
         ctx!.message!.text = '/start 49b9f2b7-4c79-4523-b0f9-6ba22b5fca8d';
-        startHandler(ctx);
+        await startHandler(ctx);
         expect(ctx.reply).toHaveBeenCalledWith('Evening, chief.');
     });
 
-    test('should recognise an invited player', () => {
+    test('should recognise an invited player', async () => {
         ctx!.message!.text = `/start ${validInvitationId}`;
-        startHandler(ctx);
+        await authenticateFromInvitation(ctx, async () => {
+            await startHandler(ctx);
+        });
         expect(ctx.reply).toHaveBeenCalledWith(`Evening, ${basicPlayer1.displayName}.`);
     });
 
-    // test('should recognise a registered player', async () => {
-    //     const result = await sendCommand('/whoami', playerOneChatId);
-    //     expect(result.data.text).toBe('Player 1');
-    // });
+    test('should recognise a registered player', async () => {
+        ctx!.message!.text = '/whoami';
+        ctx!.message!.chat!.id = playerOneChatId;
+        await authenticateFromChatId(ctx, async () => {
+            await whoAmIHandler(ctx);
+        });
+        expect(ctx.reply).toHaveBeenCalledWith('Player 1');
+    });
 
-    // test('should regard an unregistered player as anonymous', async () => {
-    //     const result = await sendCommand('/whoami');
-    //     expect(result.data.text).toBe(`I don't know`);
-    // });
+    test('should regard an unregistered player as anonymous', async () => {
+        ctx!.message!.text = '/whoami';
+        await authenticateFromChatId(ctx, async () => {
+            await whoAmIHandler(ctx);
+        });
+        expect(ctx.reply).toHaveBeenCalledWith('🤷');
+    });
 
-    // test('should provide next round date on nextfixture command', async () => {
-    //     const result = await sendCommand('/nextfixture');
-    //     expect(result.data.text).toBe('Next matches: Tue 14th Jan (Cup Quarter Finals)');
-    // });
+    test('should provide next round date on nextfixture command', async () => {
+        ctx!.message!.text = '/nextfixture';
+        await nextFixtureHandler(ctx);
+        expect(ctx.reply).toHaveBeenCalledWith('Next matches: Tue 14th Jan (Cup Quarter Finals)');
+    });
 
-    // test(`should provide player's next round date on mynextfixture command - home fixture`, async () => {
-    //     const result = await sendCommand('/mynextfixture', playerOneChatId);
-    //     expect(result.data.text).toBe(
-    //         'Next match: (H) Sat 25th Jan (Cup Semi Finals) v The Treasury All Stars'
-    //     );
-    // });
+    test(`should provide player's next round date on mynextfixture command - home fixture`, async () => {
+        ctx!.message!.text = '/mynextfixture';
+        ctx.player = basicPlayer1;
+        await myNextFixtureHandler(ctx);
+        expect(ctx.reply).toHaveBeenCalledWith(
+            'Next match: (H) Sat 25th Jan (Cup Semi Finals) v The Treasury All Stars'
+        );
+    });
 
-    // test('should provide players next round date on mynextfixture command - away fixture', async () => {
-    //     const result = await sendCommand('/mynextfixture', playerTwoChatId);
-    //     expect(result.data.text).toBe('Next match: (A) Sat 1st Feb (League Game 25) v Epic Tom');
-    // });
+    test('should provide players next round date on mynextfixture command - away fixture', async () => {
+        ctx!.message!.text = '/mynextfixture';
+        ctx.player = basicPlayer2;
+        await myNextFixtureHandler(ctx);
+        expect(ctx.reply).toHaveBeenCalledWith(
+            'Next match: (A) Sat 1st Feb (League Game 25) v Epic Tom'
+        );
+    });
 
-    // test('should handle anonymous player on mynextfixture command', async () => {
-    //     const result = await sendCommand('/mynextfixture');
-    //     expect(result.data.text).toBe('Who are you? Who are you?');
-    // });
+    test('should handle anonymous player on mynextfixture command', async () => {
+        ctx!.message!.text = '/mynextfixture';
+        await myNextFixtureHandler(ctx);
+        expect(ctx.reply).toHaveBeenCalledWith('Who are you? Who are you?');
+    });
 });

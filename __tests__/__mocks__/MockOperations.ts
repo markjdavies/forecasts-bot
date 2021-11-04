@@ -39,13 +39,13 @@ export class MockOperations implements DataOperations {
         return Promise.resolve();
     }
 
-    public GetPlayerFromChatId(chatId: number): Promise<Player> {
+    public GetPlayerFromChatId(chatId: number): Promise<Player | undefined> {
         if (chatId === playerOneChatId) {
             return Promise.resolve(basicPlayer1);
         } else if (chatId === playerTwoChatId) {
             return Promise.resolve(basicPlayer2);
         } else {
-            return Promise.reject();
+            return Promise.resolve(undefined);
         }
     }
 }
