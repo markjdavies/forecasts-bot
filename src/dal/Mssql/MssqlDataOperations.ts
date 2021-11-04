@@ -17,21 +17,14 @@ export class MssqlDataOperations implements DataOperations {
         return new sql.Request(pool);
     }
 
-    public async GetPlayerFromInvitationId(
-        invitationGuid: string
-    ): Promise<Player> {
+    public async GetPlayerFromInvitationId(invitationGuid: string): Promise<Player> {
         const request = await this.getRequest();
         request.input('invitationId', sql.UniqueIdentifier, invitationGuid);
-        const result = await request.execute<Player>(
-            'telegram.GetPlayerFromInvitationId'
-        );
+        const result = await request.execute<Player>('telegram.GetPlayerFromInvitationId');
         return result.recordsets[0][0];
     }
 
-    public async SetPlayerChatId(
-        playerId: number,
-        chatId: number
-    ): Promise<void> {
+    public async SetPlayerChatId(playerId: number, chatId: number): Promise<void> {
         const request = await this.getRequest();
         request.input('playerId', sql.Int, playerId);
         request.input('chatId', sql.Int, chatId);
@@ -42,26 +35,20 @@ export class MssqlDataOperations implements DataOperations {
     public async GetPlayerFromChatId(chatId: number): Promise<Player> {
         const request = await this.getRequest();
         request.input('chatId', sql.Int, chatId);
-        const result = await request.execute<Player>(
-            'telegram.GetPlayerFromChatId'
-        );
+        const result = await request.execute<Player>('telegram.GetPlayerFromChatId');
         return result.recordsets[0][0];
     }
 
     public async GetNextFixture(): Promise<RoundDate> {
         const request = await this.getRequest();
-        const result = await request.execute<RoundDate>(
-            'telegram.GetNextFixture'
-        );
+        const result = await request.execute<RoundDate>('telegram.GetNextFixture');
         return result.recordsets[0][0];
     }
 
     public async GetMyNextFixture(playerId: number): Promise<RoundDate> {
         const request = await this.getRequest();
         request.input('playerId', sql.Int, playerId);
-        const result = await request.execute<RoundDate>(
-            'telegram.GetPlayersNextFixture'
-        );
+        const result = await request.execute<RoundDate>('telegram.GetPlayersNextFixture');
         return result.recordsets[0][0];
     }
 }

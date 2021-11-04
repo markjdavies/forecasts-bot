@@ -1,10 +1,10 @@
 import { Player } from './dataModel/Player';
 import { DataOperations } from './dal/DataOperations';
-import { VercelRequest } from '@vercel/node';
-import { Logger } from 'pino';
+import { pino } from 'pino';
+import { Context } from 'grammy';
 
-export interface ForecastsContext extends VercelRequest {
+export interface ForecastsContext extends Context {
     dataOperations?: DataOperations;
     player?: Player;
-    log?: Logger;
+    log: pino.Logger;
 }

@@ -1,26 +1,17 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import { chain } from '@amaurym/now-middleware';
-import { log, settings } from '../src/dependencies';
-import { authenticateFromChatId } from '../src/middleware/authenticateFromChatId';
-import { configureContext } from '../src/middleware/configureContext';
-import { authenticateFromInvitation } from '../src/middleware/authenticateFromInvitation';
+import { settings } from '../src/dependencies';
 import { forecastsBot } from '../src/forecastsBot';
+import { configureContext } from '../src/middleware/configureContext';
+import { authenticateFromChatId } from '../src/middleware/authenticateFromChatId';
+import { authenticateFromInvitation } from '../src/middleware/authenticateFromInvitation';
+import { webhookCallback } from 'grammy';
 
-const bot = forecastsBot(settings);
-const handler = async (
-    req: VercelRequest,
-    res: VercelResponse
-): Promise<void> => {
-    try {
-        await bot(req, res);
-    } catch (err) {
-        log.error(err, 'Error in webhook');
-    }
-    res.send('Bot request handled.');
+const bot = forecastsBot(settings.tokenId);
+
+bot.use(configureContext);
+bot.use(authenticateFromChatId);
+bot.use(authenticateFromInvitation);
+
+export default (req: VercelRequest, res: VercelResponse) => {
+    webhookCallback(bot, 'https')(req, res);
 };
-
-export default chain(
-    configureContext(settings),
-    authenticateFromChatId(settings),
-    authenticateFromInvitation(settings)
-)(handler);

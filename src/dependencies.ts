@@ -1,21 +1,18 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
-import pino = require('pino');
-/* eslint-enable @typescript-eslint/no-require-imports */
-import { DbConnectionConfigModel } from './dal/Mssql/DbConnectionConfig';
+import * as Logger from 'pino';
 import { MssqlDataOperations } from './dal/Mssql/MssqlDataOperations';
+import { LogConfig, Settings, settingsModel } from './types';
 
-export const log = pino({
+const logConfig: LogConfig = {
     name: 'forecasts-bot',
     level: 'debug',
+};
+
+export const settings: Settings = settingsModel.parse({
+    tokenId: process.env.tokenId,
+    dbConfig: process.env.db,
+    logConfig,
 });
 
-export const dbConfig = DbConnectionConfigModel.parse(
-    JSON.parse(process.env.db)
-);
-export const dataOperations = new MssqlDataOperations(dbConfig);
+export const log = Logger.pino(logConfig);
 
-export const settings = {
-    tokenId: process.env.tokenId,
-    dataOperations,
-    log,
-};
+export const dataOperations = new MssqlDataOperations(settings.dbConfig);

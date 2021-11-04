@@ -1,5 +1,5 @@
-import { RoundDate } from '~src/dataModel/RoundDate';
-import { PlayerFixtureDate } from '~src/dataModel/PlayerFixtureDate';
+import { PlayerFixtureDate } from '../../src/dataModel/PlayerFixtureDate';
+import { RoundDate } from '../../src/dataModel/RoundDate';
 
 export const validInvitationId: string = '08ce53d1-0688-46c0-80c4-d6fa1dc2dc86';
 export const playerOneChatId: number = 11111111;

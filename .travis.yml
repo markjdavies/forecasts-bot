@@ -1,9 +1,9 @@
 language: node_js
 node_js:
-  - 12
+    - 14
 after_success: npm run coverage
 deploy:
-  provider: npm
-  script:
-    - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
-    - npm run release
+    provider: npm
+    script:
+        - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
+        - npm run test:coverage
