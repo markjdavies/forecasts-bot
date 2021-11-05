@@ -9,7 +9,7 @@ const logConfig: LogConfig = {
 
 export const settings: Settings = settingsModel.parse({
     tokenId: process.env.tokenId,
-    dbConfig: process.env.db,
+    dbConfig: JSON.parse(process.env.db ?? ''),
     logConfig,
 });
 
