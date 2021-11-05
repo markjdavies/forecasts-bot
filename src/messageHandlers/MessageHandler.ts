@@ -1,5 +1,5 @@
 import { Bot } from 'grammy';
-import { ForecastsContext } from '~src/ForecastsContext';
+import { ForecastsContext } from '../ForecastsContext';
 
 export type MessageHandler = (ctx: ForecastsContext) => Promise<void>;
 export type MessageHandlerAssignment = {

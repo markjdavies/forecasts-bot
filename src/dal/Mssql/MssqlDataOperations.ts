@@ -1,7 +1,7 @@
 import { DataOperations } from '../DataOperations';
 import * as sql from 'mssql';
-import { Player } from '~src/dataModel/Player';
-import { RoundDate } from '~src/dataModel/RoundDate';
+import { Player } from '../../dataModel/Player';
+import { RoundDate } from '../../dataModel/RoundDate';
 import { DbConnectionConfig } from './DbConnectionConfig';
 
 export class MssqlDataOperations implements DataOperations {

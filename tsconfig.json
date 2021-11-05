@@ -17,13 +17,7 @@
         "sourceMap": true,
         "mapRoot": "./",
         "rootDir": "./",
-        "baseUrl": ".",
-        "paths": {
-            "~client/*": ["client/*"],
-            "~src/*": ["src/*"],
-            "~test/*": ["test/*"],
-            "~fixtures/*": ["test/fixtures/*"]
-        }
+        "baseUrl": "."
     },
     "include": ["src/**/*"],
     "exclude": ["node_modules", "__tests__", "tmp", ".vscode", "jest.config.js", "coverage"]
