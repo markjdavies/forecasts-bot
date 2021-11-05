@@ -1,4 +1,4 @@
-import { ForecastsContext } from '~src/ForecastsContext';
+import { ForecastsContext } from '../ForecastsContext';
 import { NextFunction } from 'grammy';
 
 export const authenticateFromInvitation = async (ctx: ForecastsContext, next: NextFunction) => {

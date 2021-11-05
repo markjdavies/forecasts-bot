@@ -1,6 +1,6 @@
-import { Player } from '~src/dataModel/Player';
-import { RoundDate } from '~src/dataModel/RoundDate';
-import { PlayerFixtureDate } from '~src/dataModel/PlayerFixtureDate';
+import { Player } from '../dataModel/Player';
+import { RoundDate } from '../dataModel/RoundDate';
+import { PlayerFixtureDate } from '../dataModel/PlayerFixtureDate';
 
 export interface DataOperations {
     GetPlayerFromInvitationId(invitationGuid: string): Promise<Player>;
