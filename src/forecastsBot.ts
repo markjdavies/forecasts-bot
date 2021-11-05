@@ -50,7 +50,5 @@ export const forecastsBot = (token: string) => {
     const assign = messageHandlerAssignator(bot);
     messageHandlers.forEach((handler) => assign(handler));
 
-    bot.start();
-
     return bot;
 };
