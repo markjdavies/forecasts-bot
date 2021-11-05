@@ -1,4 +1,4 @@
-import * as Logger from 'pino';
+import { pino } from 'pino';
 import { MssqlDataOperations } from './dal/Mssql/MssqlDataOperations';
 import { LogConfig, Settings, settingsModel } from './types';
 
@@ -13,6 +13,6 @@ export const settings: Settings = settingsModel.parse({
     logConfig,
 });
 
-export const log = Logger.pino(logConfig);
+export const log = pino(logConfig);
 
 export const dataOperations = new MssqlDataOperations(settings.dbConfig);
