@@ -1,10 +1,10 @@
 import * as z from 'zod';
 
 export const dbConnectionConfigModel = z.object({
-    dbUsername: z.string(),
-    dbPassword: z.string(),
-    dbHostName: z.string(),
-    databaseName: z.string(),
+    user: z.string(),
+    password: z.string(),
+    server: z.string(),
+    database: z.string(),
 });
 
 export type DbConnectionConfig = z.infer<typeof dbConnectionConfigModel>;

@@ -5,14 +5,10 @@ import { RoundDate } from '../../dataModel/RoundDate';
 import { DbConnectionConfig } from './DbConnectionConfig';
 
 export class MssqlDataOperations implements DataOperations {
-    private _connectString: string;
-    constructor(config: DbConnectionConfig) {
-        const { dbUsername, dbPassword, dbHostName, databaseName } = config;
-        this._connectString = `mssql://${dbUsername}:${dbPassword}@${dbHostName}/${databaseName}`;
-    }
+    constructor(private readonly config: DbConnectionConfig) {}
 
     private async getRequest(): Promise<sql.Request> {
-        const pool = new sql.ConnectionPool(this._connectString);
+        const pool = new sql.ConnectionPool(this.config);
         await pool.connect();
         return new sql.Request(pool);
     }
