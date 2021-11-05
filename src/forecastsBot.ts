@@ -11,7 +11,6 @@ import { myNextFixtureHandler } from './messageHandlers/myNextFixtureHandler';
 import { authenticateFromChatId } from './middleware/authenticateFromChatId';
 import { authenticateFromInvitation } from './middleware/authenticateFromInvitation';
 import { configureContext } from './middleware/configureContext';
-import { Bit } from 'mssql';
 
 const messageHandlers: MessageHandlerAssignment[] = [
     {
