@@ -8,6 +8,10 @@ import { startHandler } from './messageHandlers/startHandler';
 import { whoAmIHandler } from './messageHandlers/whoAmIHandler';
 import { nextFixtureHandler } from './messageHandlers/nextFixtureHandler';
 import { myNextFixtureHandler } from './messageHandlers/myNextFixtureHandler';
+import { authenticateFromChatId } from './middleware/authenticateFromChatId';
+import { authenticateFromInvitation } from './middleware/authenticateFromInvitation';
+import { configureContext } from './middleware/configureContext';
+import { Bit } from 'mssql';
 
 const messageHandlers: MessageHandlerAssignment[] = [
     {
@@ -37,9 +41,17 @@ const messageHandlers: MessageHandlerAssignment[] = [
 
 export const forecastsBot = (token: string) => {
     const bot = new Bot<ForecastsContext>(token);
-    const assign = messageHandlerAssignator(bot);
 
+    // Apply middleware
+    bot.use(configureContext);
+    bot.use(authenticateFromChatId);
+    bot.use(authenticateFromInvitation);
+
+    // Apply handlers
+    const assign = messageHandlerAssignator(bot);
     messageHandlers.forEach((handler) => assign(handler));
+
+    bot.start();
 
     return bot;
 };
