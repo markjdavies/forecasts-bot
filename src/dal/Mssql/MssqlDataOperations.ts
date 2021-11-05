@@ -8,12 +8,7 @@ export class MssqlDataOperations implements DataOperations {
     constructor(private readonly config: DbConnectionConfig) {}
 
     private async getRequest(): Promise<sql.Request> {
-        const { server, database, user, password, port } = this.config;
-
-        const connectionString = `Driver={SQL Server Native Client 11.0};Server={${server},${
-            port ?? 1433
-        }};Database={${database}};Uid={${user}};Pwd={${password}};Trusted_Connection={yes};`;
-        const pool = new sql.ConnectionPool(connectionString);
+        const pool = new sql.ConnectionPool(this.config);
         await pool.connect();
         return new sql.Request(pool);
     }

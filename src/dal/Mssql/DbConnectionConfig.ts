@@ -6,6 +6,7 @@ export const dbConnectionConfigModel = z.object({
     server: z.string(),
     database: z.string(),
     port: z.number().optional(),
+    encrypt: z.boolean().optional(),
 });
 
 export type DbConnectionConfig = z.infer<typeof dbConnectionConfigModel>;
