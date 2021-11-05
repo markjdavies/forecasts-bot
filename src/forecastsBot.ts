@@ -25,7 +25,7 @@ const messageHandlers: MessageHandlerAssignment[] = [
         },
     },
     {
-        message: 'whoAmI',
+        message: 'whoami',
         handler: whoAmIHandler,
     },
     {
