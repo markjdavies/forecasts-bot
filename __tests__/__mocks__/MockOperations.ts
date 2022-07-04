@@ -7,8 +7,9 @@ import {
     playerAwayFixture,
     playerOneChatId,
     playerTwoChatId,
+    clamChatId,
 } from '../__fixtures__/Fixtures';
-import { basicPlayer1, basicPlayer2 } from '../__fixtures__/PlayerFixtures';
+import { basicPlayer1, basicPlayer2, playerClam } from '../__fixtures__/PlayerFixtures';
 import { RoundDate } from '../../src/dataModel/RoundDate';
 import { PlayerFixtureDate } from '../../src/dataModel/PlayerFixtureDate';
 
@@ -44,8 +45,14 @@ export class MockOperations implements DataOperations {
             return Promise.resolve(basicPlayer1);
         } else if (chatId === playerTwoChatId) {
             return Promise.resolve(basicPlayer2);
+        } else if (chatId === clamChatId) {
+            return Promise.resolve(playerClam);
         } else {
             return Promise.resolve(undefined);
         }
+    }
+
+    public PerformCupDraw(): Promise<void> {
+        return Promise.resolve();
     }
 }

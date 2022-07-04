@@ -3,13 +3,14 @@ import * as pino from 'pino';
 import { authenticateFromChatId } from '../src/middleware/authenticateFromChatId';
 import { authenticateFromInvitation } from '../src/middleware/authenticateFromInvitation';
 import { MockOperations } from './__mocks__/MockOperations';
-import { validInvitationId, playerOneChatId } from './__fixtures__/Fixtures';
+import { validInvitationId, playerOneChatId, clamChatId } from './__fixtures__/Fixtures';
 import { basicPlayer1, basicPlayer2 } from './__fixtures__/PlayerFixtures';
 import { ForecastsContext } from '../src/ForecastsContext';
 import { startHandler } from '../src/messageHandlers/startHandler';
 import { whoAmIHandler } from '../src/messageHandlers/whoAmIHandler';
 import { nextFixtureHandler } from '../src/messageHandlers/nextFixtureHandler';
 import { myNextFixtureHandler } from '../src/messageHandlers/myNextFixtureHandler';
+import { cupDrawHandler } from '../src/messageHandlers/cupDrawHandler';
 
 const log = pino.pino({
     name: 'forecasts-bot-tests',
@@ -105,5 +106,29 @@ describe('Forecasts bot', () => {
         ctx!.message!.text = '/mynextfixture';
         await myNextFixtureHandler(ctx);
         expect(ctx.reply).toHaveBeenCalledWith('Who are you? Who are you?');
+    });
+
+    test('should allow Clam to generate cup fixtures', async () => {
+        ctx!.message!.text = '/cupdraw';
+        ctx!.message!.chat!.id = clamChatId;
+        await authenticateFromChatId(ctx, async () => {
+            await whoAmIHandler(ctx);
+        });
+        await cupDrawHandler(ctx);
+        expect(ctx.reply).toHaveBeenCalledWith('Cup draw requested - check fixtures');
+    });
+
+    test('should deny users other than Clam to generate cup fixtures', async () => {
+        ctx!.message!.text = '/cupdraw';
+        ctx!.message!.chat!.id = playerOneChatId;
+        await authenticateFromChatId(ctx, async () => {
+            await whoAmIHandler(ctx);
+        });
+        await expect(cupDrawHandler(ctx)).rejects.toThrow('No authorisation to perform a cup draw');
+    });
+
+    test('should deny anonymous users generating cup fixtures', async () => {
+        ctx!.message!.text = '/cupdraw';
+        await expect(cupDrawHandler(ctx)).rejects.toThrow('No authorisation to perform a cup draw');
     });
 });

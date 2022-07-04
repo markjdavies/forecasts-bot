@@ -10,6 +10,7 @@ import { nextFixtureHandler } from './messageHandlers/nextFixtureHandler';
 import { myNextFixtureHandler } from './messageHandlers/myNextFixtureHandler';
 import { authenticateFromChatId } from './middleware/authenticateFromChatId';
 import { authenticateFromInvitation } from './middleware/authenticateFromInvitation';
+import { cupDrawHandler } from './messageHandlers/cupDrawHandler';
 import { configureContext } from './middleware/configureContext';
 
 const messageHandlers: MessageHandlerAssignment[] = [
@@ -35,6 +36,10 @@ const messageHandlers: MessageHandlerAssignment[] = [
     {
         message: 'mynextfixture',
         handler: myNextFixtureHandler,
+    },
+    {
+        message: 'cupdraw',
+        handler: cupDrawHandler, // execute FC_I_GenerateCupFixtures
     },
 ];
 
