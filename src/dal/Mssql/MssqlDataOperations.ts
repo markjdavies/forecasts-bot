@@ -47,4 +47,9 @@ export class MssqlDataOperations implements DataOperations {
         const result = await request.execute<RoundDate>('telegram.GetPlayersNextFixture');
         return result.recordsets[0][0];
     }
+
+    public async PerformCupDraw(): Promise<void> {
+        const request = await this.getRequest();
+        await request.execute('dbo.FC_I_GenerateCupFixtures');
+    }
 }

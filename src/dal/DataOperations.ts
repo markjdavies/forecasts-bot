@@ -8,4 +8,5 @@ export interface DataOperations {
     GetNextFixture(): Promise<RoundDate>;
     GetMyNextFixture(playerId: number): Promise<PlayerFixtureDate>;
     SetPlayerChatId(playerId: number, chatId: number): Promise<void>;
+    PerformCupDraw(): Promise<void>;
 }

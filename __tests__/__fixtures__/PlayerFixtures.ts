@@ -13,3 +13,10 @@ export const basicPlayer2: Player = {
     displayName: 'Player 2',
     team: 'Player Two FC',
 };
+
+export const playerClam: Player = {
+    playerId: 3,
+    userName: 'Clam',
+    displayName: 'The Clam',
+    team: 'Atletico Chowder',
+};
