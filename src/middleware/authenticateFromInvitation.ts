@@ -9,6 +9,8 @@ export const authenticateFromInvitation = async (ctx: ForecastsContext, next: Ne
             if (player) {
                 await ctx.dataOperations?.SetPlayerChatId(player.playerId, ctx.message.chat.id);
                 ctx.player = player;
+            } else {
+                ctx.log.warn({ invitationGuid }, 'Could not identify player from invitationGuid');
             }
         }
     }

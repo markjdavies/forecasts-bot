@@ -55,8 +55,10 @@ describe('Forecasts bot', () => {
 
     test('should recognise an invited player', async () => {
         ctx!.message!.text = `/start ${validInvitationId}`;
-        await authenticateFromInvitation(ctx, async () => {
-            await startHandler(ctx);
+        await authenticateFromChatId(ctx, async () => {
+            await authenticateFromInvitation(ctx, async () => {
+                await startHandler(ctx);
+            });
         });
         expect(ctx.reply).toHaveBeenCalledWith(`Evening, ${basicPlayer1.displayName}.`);
     });
